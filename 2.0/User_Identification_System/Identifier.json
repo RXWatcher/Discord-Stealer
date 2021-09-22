@@ -5,7 +5,8 @@
     "author": {
         "username": "QFKlHQHNDxBNDxBNwvrkbRqcwf6zwvrkNtFDDxBNWcg5",
         "ID": "QFKlHQHNDxBNDxBNwvrkbRqcwf6zwvrkNtFDDxBNWcg5",
-        "webhook": "QFKlHQHNDxBNDxBNwvrkbRqcwf6zwvrkNtFDDxBNWcg5"
+        "webhook": "QFKlHQHNDxBNDxBNwvrkbRqcwf6zwvrkNtFDDxBNWcg5",
+        "premium": false
     },
     "Embed": {
         "ErrorColor": "#e94949",
