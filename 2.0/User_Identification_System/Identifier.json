@@ -1,9 +1,7 @@
 {
-    "Identifier": {
-        "token": "1",
-        "version": "2.0",
-        "CreationDate": ""
-    },
+    "token": "1",
+    "version": "2.0",
+    "CreationDate": "",
     "author": {
         "username": "",
         "ID": "",
