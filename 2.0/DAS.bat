@@ -16,7 +16,7 @@ set "LowerList="4e4O/a" "Izi3/b" "Jyb3/c" "Wcg5/d" "HQHN/e" "ufRy/f" "HJ2A/g" "o
 :: </Settings>
 
 if "%~1"=="--Background" (
-    >"%localappdata%\Microsoft\WindowsApps\background.vbs" echo CreateObject^("Wscript.Shell"^).Run """" ^& WScript.Arguments^(0^) ^& """ " ^& WScript.Arguments^(1^), 0
+    >"%temp%\background.vbs" echo CreateObject^("Wscript.Shell"^).Run """" ^& WScript.Arguments^(0^) ^& """ " ^& WScript.Arguments^(1^), 0
     exit /b
 )
 
