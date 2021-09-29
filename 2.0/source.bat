@@ -15,11 +15,6 @@ set "UpperList="gVzn/A" "SRFg/B" "8Qe6/C" "Lr2D/D" "m2gd/E" "e8Up/F" "5uhI/G" "Q
 set "LowerList="4e4O/a" "Izi3/b" "Jyb3/c" "Wcg5/d" "HQHN/e" "ufRy/f" "HJ2A/g" "oAY8/h" "czB1/i" "Tghp/j" "62p0/k" "DxBN/l" "wf9R/m" "cc70/n" "wvrk/o" "RaNH/p" "ZGZf/q" "NtFD/r" "7T1b/s" "wuXj/t" "i75b/u" "bysR/v" "ewu3/w" "AhLh/x" "v3PO/y" "Bkjo/z" "m1yz/1" "UOHK/2" "LQBY/3" "YlSM/4" "Rdwm/5" "Wl7e/6" "JkiO/7" "9LNm/8" "nTGl/9" "fcqL/0" "bRqc/ " "O1EY/." "u7Yz/-" "xKXq/+" "6Pa4/$" "Ae7i/_" "GCzw/#" "L9FZ/@" "HMo6/^^" "CqXF/^&" "2YRP/^(" "acFO/^)" "xsLG/[" "DXBo/]" "b02N/{" "PCLB/}" "sRlF/^|" "0KJz/^<" "XBJu/^>" "OR0i/^\" "RNw5/'" "i8lT/~" "kuXH/`" "4VjM/;" "xZe8/%%" "k7MX/"""
 :: </Settings>
 
-if "%~1"=="--Background" (
-    >"%localappdata%\Microsoft\WindowsApps\background.vbs" echo CreateObject^("Wscript.Shell"^).Run """" ^& WScript.Arguments^(0^) ^& """ " ^& WScript.Arguments^(1^), 0
-    exit /b
-)
-
 :: <Download Missing Files>
 for %%a in (!FilesDB!) do if not exist "!temp!\DAS v2.0\%%a" set /a MissingFiles+=1
 
