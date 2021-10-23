@@ -1,0 +1,10 @@
+{
+    "token": "10000-00000",
+    "version": "2.5",
+    "CreationDate": "Thu 09/30/2021 0:23",
+    "Enabled": true,
+    "author": {
+        "ID": "<Compiled Value>",
+        "Endpoint": "<Compiled URL token>"
+    }
+}
