@@ -46,5 +46,5 @@
     ![Image](https://cdn.agamsol.xyz:90/media/DiscordCanary_OeBXdYP8Wl.png)
 - Code and identification system reducements
 
-### 💲 Buy me a coffe
+### 💲 Buy me a coffee
 > <a href="https://www.paypal.me/agamsolomon0011" rel="paypal donations">![donate](https://img.shields.io/badge/Donate-Paypal-brightgreen.svg)</a>
