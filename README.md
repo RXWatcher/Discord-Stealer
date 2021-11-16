@@ -1,4 +1,4 @@
-## 🔑 Discord Accounts Stealer 2.6
+## 🔑 Discord Accounts Stealer 2.6.1
 > **If not the best and easiest discord token stealing software script! :tada:**
 
 > **🤖 They Run the code? You get their discord! - It's that easy!**
@@ -21,7 +21,7 @@
 ## 🛒 Getting Started
 ##### :warning: Already own 2.5 identifier?
 - You do not need to create another identifier.
-- the command you have will now run version 2.6
+- the command you have will now run version 2.6.1
 - **NOTE: You Should really ask us for the new command as it fixes some SSL issues and adds silent mode feature**
 
 #### ⛩ Lets Create your Identifier?
