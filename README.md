@@ -37,15 +37,9 @@
 ##### 🔌 LOGIN TO ACCOUNS USING TOKEN: Watch the [Tutorial](https://youtu.be/u_oF1gEYTBk) to see how to login to the Account.
 
 ## 📝 What's New?
-- Completely new download system _(Download Archive and unzip)_
-
-  **Save a lot of waiting time on downloading files**
-- Completely new ERRORS system _(Space Reducements and Error correction + Discord messages buggy with loading values on some errors)_
-- Fixed SSL Protocol issues _(SSL will not revoke on curl commands)_
-
-    **New Flags Support _(Prepare for Discord Startup Update)_**
-- Send builds for specific Discord Builds or browsers _(`--build "PTB Canary Developer . . ."`)_
-- Specify identifiers using the `--identifier XXXXX-XXXXX` flag _(if you define specific  builds you need this)_
+- Error messages are fixed and loading all DATA _(High Priority Queque)_
+- Improved parameters system _(now accepts quoted `"strings"`)_
+- Will not add failure stats when the identifier is disabled.
 
 ## 💡 Plans for the feature
 - Include Billing information in the discord message - Paypal, Credit Card Information
