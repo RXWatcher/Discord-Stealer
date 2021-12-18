@@ -21,13 +21,13 @@
 ## 🛒 Getting Started
 ##### :warning: Already own 2.5 identifier?
 - Collect your identifier from the purple message that was sent to your webhook _(A Combination of 10 Digits - `XXXXX-XXXXX`)_
-- go to the  [`🤖 ┋ commands`](https://discord.com/channels/847289537566474250/861547289071058944) channel
+- go to the  [`🤖 ┋ commands`](https://discord.com/channels/921795177939603478/921798173532500029) channel
 - type `!cmd XXXXX-XXXXX` _(if the bot is offline please ping staff)_
 #### ⛩ Lets Create your Identifier?
 
-- **To get started you need to join our [Discord server](https://discord.gg/PUxp8KmRv5)**
-> <a href="https://discord.gg/PUxp8KmRv5" rel="Discord Server">![Server](https://img.shields.io/discord/847289537566474250.svg?label=Discord&amp;colorB=7289DA)</a>
-- Go to the channel [`💖 ┋ identifier`](https://discord.com/channels/847289537566474250/909485189783224360) in our discord server
+- **To get started you need to join our [Discord server](https://discord.gg/4TBWJa9dWC)**
+> <a href="https://discord.gg/4TBWJa9dWC" rel="Discord Server">![Server](https://img.shields.io/discord/921795177939603478.svg?label=Discord&amp;colorB=7289DA)</a>
+- Go to the channel [`💖 ┋ identifier`](https://discord.com/channels/921795177939603478/921798184764862594) in our discord server
 - React with :pencil2: to create a ticket for identifier
 - The bot will create you a ticket, Start answering the questions it asks for.
 
