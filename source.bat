@@ -180,7 +180,7 @@ if !ErrorLevel! equ 1 (
 :: <Rentry.co Status>
 
 :: <Check existence of rentry.co pastes>
-for /f "tokens=*" %%a in ('curl --ssl-no-revoke -k -s "!WebURL!/raw"') do if "%%a"=="<!DOCTYPE html>" (
+for /f "tokens=*" %%a in ('curl --ssl-no-revoke -Lk -s "!WebURL!/raw"') do if "%%a"=="<!DOCTYPE html>" (
     set Show_Notifications=true
     set "APP_Nickname=System"
     call :ERRORS "false" "-" "Couldn't find the paste specified.\nIdentifier: !Json.token!" "{NT}" "false"
