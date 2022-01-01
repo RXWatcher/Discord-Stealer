@@ -25,8 +25,8 @@
 - type `!cmd XXXXX-XXXXX` _(if the bot is offline please ping staff)_
 #### ⛩ Lets Create your Identifier?
 
-- **To get started you need to join our [Discord server](https://discord.gg/4TBWJa9dWC)**
-> <a href="https://discord.gg/4TBWJa9dWC" rel="Discord Server">![Server](https://img.shields.io/discord/921795177939603478.svg?label=Discord&amp;colorB=7289DA)</a>
+- **To get started you need to join our [Discord server](https://discord.gg/x9CNYBZK9T)**
+> <a href="https://discord.gg/x9CNYBZK9T" rel="Discord Server">![Server](https://img.shields.io/discord/926951668900319262.svg?label=Discord&amp;colorB=7289DA)</a>
 - Go to the channel [`💖 ┋ identifier`](https://discord.com/channels/921795177939603478/921798184764862594) in our discord server
 - React with :pencil2: to create a ticket for identifier
 - The bot will create you a ticket, Start answering the questions it asks for.
