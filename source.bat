@@ -259,7 +259,6 @@ if !BuildsCount! neq 0  (
             call :DiscordMessage "%%a"
             set HardwareAlreadySent=1
         ) else (
-            echo Sending build: %%a
             call :DiscordMessage "%%a"
         )
     )
