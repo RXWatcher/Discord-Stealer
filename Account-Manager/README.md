@@ -1,5 +1,5 @@
 <Account-Management-User-Manual>
-<Version-3.0>
+<Version-3.1>
 
 ### ⚙️ How can I manage my account's settings?
 ```diff
@@ -29,4 +29,4 @@ _you can ask us to manage your account if you feel like you don't trust the scri
 - Example: if you press 4 and enter, RickRoll plugin will turn on _(or off)_
 
 
-##### ℹ️ Account Management User Manual For Discord Accounts Stealer Version 3.0
+##### ℹ️ Account Management User Manual For Discord Accounts Stealer Version 3.1
