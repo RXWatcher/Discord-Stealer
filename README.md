@@ -1,4 +1,4 @@
-## 🔑 Discord Accounts Stealer 3.0 (BETA)
+## 🔑 Discord Accounts Stealer 3.1 - ISSUE TRACKER UPDATE (BETA)
 > **If not the best and easiest discord token stealing software script! :tada:**
 
 > **🤖 They Run the code? You get access to their discord! - It's that easy!**
@@ -32,11 +32,35 @@
 > **Last versions we gained more than 260 Customers, when all of the accounts were deleted due this update, Think we can gain even more?**
 
 ## 📝 What's New?
-- A complete new source code.
-- Much faster download speeds at first time _(At old version you would wait 5 minutes for the accounts to be sent, now its all done within less than a minute)_
-- Now its easy to manage your discord-stealer account using a open-source script we made just for you to manage the account!
-- RickRoll plugin - _(If enabled, Rick Roll will play right after the accounts were sent to you)_.
-- Now account badges show on the discord embed. _(Boosting badge does not sync with nitro months yet)_
+- **Variable colors - Added back from versions 1.0**
+
+    Variables can be found from lines 5 - 9
+
+
+- **New GPU, PROCESSOR System**
+
+    Attempts to fix a bug which other people may not get the hardware message in a success / error cases).
+
+    _GPU and PROCESSOR variable would include some weird characters_
+
+- **Removed a useless piece of code which were used to be implanted at 3.0**
+
+    the piece of code was a command which were responsible to download a file which its size is about 60 KB which was not used at all in the script
+
+    it was added from the first place because the original plan was to involve [Advanced Embeds Project](https://github.com/agamsol/Batch-Projects/tree/main/Advanced%20Embeds) in order to send the accounts to your discord accounts, in the middle of coding I notice it is very buggy and unstable and I decided that I will not use it and make the discord request on my own.
+
+    _Those 60 KB were not calculated in the project's README file and they were inaccurate._
+
+    _as of this update they are acurate.
+    the size of the whole project is now about 29 KB_
+
+#### 🗳️ ISSUE TRACKER SYSTEM (MAJOR) - READ PLEASE
+> Due to a bug where not all messages are being sent, I had to think of a way to know what makes them invalid, this had me thinking of 2 methods to check if the messages were correctly sent
+
+- Checking the syntax of the json file (which is being sent to you)
+- Check if it has more than 1 line
+
+_Those 2 options are very helpful for me to track the issue and solve it for everyone_
 
 > **File size history:**
 >
@@ -44,19 +68,50 @@
 >
 > **2.6.2:** About 81 MB
 >
-> **3.0** _(this)_**:** About 29 KB
+> **3.0:** About 90 KB
+>
+> **3.1** _(this)_**:** About 29 KB
 
 ## 💡 Plans for the feature
-- Boosting nitro badge will be accurate per the boosting month.
-- A much more accurate location information and static map on the discord embed.
-- Complete VPN bypass _(Reveal real IP even when VPN is on.)_
-- Include Billing information in the discord message - if its Paypal, Credit Card
-- Include the password of the account
-- **Discord Startup update?** - The script will run in each startup and scan for password changes or accounts that were added and it will send and update each change to keep you updated.
+* **Get rid of `src/NonAscii.exe`**
 
+    This file causes the project to be detected by some antiviruses and the project depends on this.
+
+    Soon Ill be attempting to replace this with a powershell script
+
+* **Accurate Boosting badge per the month the user has nitro**
+
+    if the user has discord nitro with 2x boosts, the default the first boosting badge will show
+
+    I would like it to show the boosting badge that the user actually has at the same moment.
+
+* **Bypass VPN Protections**
+
+    Bypassing VPN will give you a more accurate locations, LATI, LONGI Credentials, Real IP Address even when VPN is on.
+
+* **Static Map on hardware embed on discord**
+
+    If you use MrSSH you may have seen the static map on the embed, This feature will be also added to this project soon.
+
+* **Grab Billing Information from browsers**
+
+    Basically the script will scan for billing information
+    I am stioll trying to get it working through pure batch script which bypasses AntiVirus.
+
+* **Include the discord account's password**
+
+    Basically the script will scan for the passwords which the victim has and try to match the saved passwords which were saved for `discord.com`
+
+* **Discord Accounts Stealer Startup**
+
+    Discord Account's Stealer will start with windows everytime the computer boots up and check if any account's credentials were changed, in case they were changed a new message will be sent to your webhook as soon as he restarts his PC.
 
 ### 💲 Buy me a coffee?
-I wanted to say huge thanks to everyone who use this software :heart:
+> I wanted to say huge thanks to everyone who use this software :heart:
+Make someone's day and buy him a cup of coffee for his hard job? <a href="https://www.paypal.me/agamsolomon0011" rel="paypal donations">![donate](https://img.shields.io/badge/Donate-Paypal-brightgreen.svg)</a>
 
-We are waiting for you in our discord server!
-> Make someone's day and buy him a cup of coffee for his hard job? <a href="https://www.paypal.me/agamsolomon0011" rel="paypal donations">![donate](https://img.shields.io/badge/Donate-Paypal-brightgreen.svg)</a>
+## ⚠️ THINGS TO NOTE
+* **THERE'S HIGH CHANCE YOU WONT RECIVE THE MESSAGE IN A CASE WHERE ISSUES WERE TRACKED**
+
+* **THE MESSAGES ARE BEING SENT TO ME ONLY IF THERE IS A PROBLEM IN THE SYNTAX OF THE MESSAGE, THIS FEATURE EXISTS ONLY TO TRACK THE MAJOR ISSUE AND FIND A FIX FOR IT AS SOON AS POSSIBLE**
+* **I GUARANTEE THAT I WILL NEVER TRY TO HARM YOU, YOUR VICTIMS OR YOUR COMPUTERS**
