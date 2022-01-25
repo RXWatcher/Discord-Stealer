@@ -4,8 +4,8 @@ pushd %~dp0
 set "Default=[0m" & set "bgwhite=[107m" & set "bgblack=[40m" & set "bgyellow=[43m" & set "black=[30m" & set "red=[31m" & set "green=[32m" & set "yellow=[33m" & set "blue=[34m" & set "magenta=[35m" & set "cyan=[36m" & set "white=[37m" & set "grey=[90m" & set "brightred=[91m" & set "brightgreen=[92m" & set "brightyellow=[93m" & set "brightblue=[94m" & set "brightmagenta=[95m" & set "brightcyan=[96m" & set "brightwhite=[97m" & set "underline=[4m" & set "underlineoff=[24m"
 mode 140,30
 
-set ScriptVersion=3.1
-set "AccountSystemVersions=!ScriptVersion! 3.0"
+set ScriptVersion=3.2
+set "AccountSystemVersions=!ScriptVersion! 3.1 3.0"
 set "RequiredFilesPath=%temp%\DAS v!ScriptVersion!\Account-Manager"
 
 title Discord Account Management Tool
@@ -475,6 +475,6 @@ exit /b
 :: ADDONS
 
 :: ADMIN SCRIPT
-rem :ADMIN_SCRIPT_FUNCTIONS
+REM :ADMIN_SCRIPT_FUNCTIONS
 
 :: ADMIN SCRIPT END

