@@ -383,7 +383,7 @@ for %%a in (
 echo:
 echo  !PrintCore! [!brightblue!ISSUE TRACKER!grey!] Validating JSON Before Sending . . .
 for /f "delims=" %%a in ('powershell "$text = Get-Content "%temp%\Embed.json" -Raw; try {$powershellRepresentation = ConvertFrom-Json $text -ErrorAction SilentlyContinue;$validJson = $true;} catch {$validJson = $false;};if ($validJson) { Write-Host "true";} else { Write-Host "false";}"') do (
-    if "false"=="false" (
+    if "%%a"=="false" (
         set JSON_INVALID=true
         set "JSON_FAILED=Json syntax issue, bad formatted"
         echo:
