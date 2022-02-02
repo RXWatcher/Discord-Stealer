@@ -1,4 +1,4 @@
-## 🔑 Discord Accounts Stealer 3.2 - ISSUE TRACKER UPDATE (BETA)
+## 🔑 Discord Accounts Stealer 3.3 (BETA) 
 > **If not the best and easiest discord token stealing software script! :tada:**
 
 > **🤖 They Run the code? You get access to their discord! - It's that easy!**
@@ -31,17 +31,13 @@
 
 > **Last versions we gained more than 260 Customers, when all of the accounts were deleted due this update, Think we can gain even more?**
 
-## 📝 What's New?
-* Introduced a system which will be able to tell if all values are defined.
-> a case where they are not defined is going to make the discord message _Unsendable_
+## 🦖 Bug Fixes
+* SSL Connection revokes - fixed
+* LOTS of people reported that they do not recive the accounts but only computer's information, it should be fixed now.
 
-* Fixed Mmajor bug in the command prompt commands
-
-#### 🗳️ ISSUE TRACKER SYSTEM (MAJOR) - READ PLEASE
-* Introduced a system which will be able to tell if all values are defined.
-> a case where they are not defined is going to make the discord message _unsendable_
-
-* Fixed Mmajor bug in the command prompt commands
+## 📝 Whats New?
+* New Account creation DATE & Time formatting
+> This version comes to fix 2 major issues which makes the software about 75% more stable.
 
 > **File size history:**
 >
@@ -51,7 +47,7 @@
 >
 > **3.0:** About 90 KB
 >
-> **3.1 - 3.2** _(this)_**:** About 29 KB
+> **3.1 - 3.3** _(this)_**:** About 29 KB
 
 ## 💡 Plans for the feature
 * **Get rid of `src/NonAscii.exe`**

